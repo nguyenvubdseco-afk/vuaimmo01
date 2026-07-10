@@ -13,12 +13,14 @@ import {
   deleteContactSubmission,
   deleteProductFile,
   deleteProductImage,
-  getProducts,
+  deleteProductRow,
+  getProduct,
   getSiteContent,
+  insertProduct,
   saveProductFile,
   saveProductImage,
-  saveProducts,
   saveSiteContent,
+  updateProductRow,
   type PricingTier,
   type Product,
 } from "@/lib/store";
@@ -133,9 +135,8 @@ export async function createProduct(formData: FormData) {
     softwareFileSize = saved.size;
   }
 
-  const products = await getProducts();
   const newId = createProductId();
-  products.push({
+  await insertProduct({
     id: newId,
     ...fields,
     image,
@@ -143,7 +144,6 @@ export async function createProduct(formData: FormData) {
     softwareFileName,
     softwareFileSize,
   });
-  await saveProducts(products);
 
   revalidatePath("/admin");
   revalidatePublicPages(newId);
@@ -154,11 +154,10 @@ export async function updateProduct(id: string, formData: FormData) {
   await requireAuth();
   const fields = parseProductFields(formData);
 
-  const products = await getProducts();
-  const index = products.findIndex((product) => product.id === id);
-  if (index === -1) throw new Error("Không tìm thấy sản phẩm.");
+  const existing = await getProduct(id);
+  if (!existing) throw new Error("Không tìm thấy sản phẩm.");
 
-  let image = products[index].image;
+  let image = existing.image;
   const imageFile = formData.get("image");
   const removeImage = formData.get("removeImage") === "on";
 
@@ -170,9 +169,9 @@ export async function updateProduct(id: string, formData: FormData) {
     image = null;
   }
 
-  let softwareFile = products[index].softwareFile;
-  let softwareFileName = products[index].softwareFileName;
-  let softwareFileSize = products[index].softwareFileSize;
+  let softwareFile = existing.softwareFile;
+  let softwareFileName = existing.softwareFileName;
+  let softwareFileSize = existing.softwareFileSize;
   const uploadedFile = formData.get("softwareFile");
   const removeSoftwareFile = formData.get("removeSoftwareFile") === "on";
 
@@ -189,15 +188,13 @@ export async function updateProduct(id: string, formData: FormData) {
     softwareFileSize = null;
   }
 
-  products[index] = {
-    ...products[index],
+  await updateProductRow(id, {
     ...fields,
     image,
     softwareFile,
     softwareFileName,
     softwareFileSize,
-  };
-  await saveProducts(products);
+  });
 
   revalidatePath("/admin");
   revalidatePath(`/admin/products/${id}`);
@@ -209,13 +206,11 @@ export async function deleteProduct(formData: FormData) {
   await requireAuth();
   const id = String(formData.get("id") ?? "");
 
-  const products = await getProducts();
-  const index = products.findIndex((product) => product.id === id);
-  if (index !== -1) {
-    await deleteProductImage(products[index].image);
-    await deleteProductFile(products[index].softwareFile);
-    products.splice(index, 1);
-    await saveProducts(products);
+  const existing = await getProduct(id);
+  if (existing) {
+    await deleteProductImage(existing.image);
+    await deleteProductFile(existing.softwareFile);
+    await deleteProductRow(id);
   }
 
   revalidatePath("/admin");

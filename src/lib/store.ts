@@ -1,6 +1,5 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { supabase } from "@/lib/supabase";
 
 export type PricingTier = {
   label: string;
@@ -72,13 +71,8 @@ export type SiteContent = {
   };
 };
 
-const STORE_DIR = path.join(process.cwd(), "src", "data", "store");
-const PRODUCTS_FILE = path.join(STORE_DIR, "products.json");
-const SITE_FILE = path.join(STORE_DIR, "site.json");
-const CONTACTS_FILE = path.join(STORE_DIR, "contacts.json");
-const ORDERS_FILE = path.join(STORE_DIR, "orders.json");
-const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads", "products");
-const SOFTWARE_DIR = path.join(process.cwd(), "public", "uploads", "software");
+const PRODUCT_IMAGES_BUCKET = "product-images";
+const SOFTWARE_FILES_BUCKET = "software-files";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const ALLOWED_IMAGE_TYPES: Record<string, string> = {
@@ -103,86 +97,244 @@ const ALLOWED_SOFTWARE_EXTENSIONS = new Set([
   ".gz",
 ]);
 
-async function readJson<T>(file: string): Promise<T> {
-  const raw = await fs.readFile(file, "utf-8");
-  return JSON.parse(raw) as T;
+function extname(filename: string): string {
+  const dot = filename.lastIndexOf(".");
+  return dot === -1 ? "" : filename.slice(dot).toLowerCase();
 }
 
-async function writeJson(file: string, data: unknown) {
-  await fs.writeFile(file, `${JSON.stringify(data, null, 2)}\n`, "utf-8");
+// ---------------------------------------------------------------------------
+// Products
+// ---------------------------------------------------------------------------
+
+type ProductRow = {
+  id: string;
+  name: string;
+  tagline: string;
+  category: string;
+  price: string;
+  rating: string;
+  image: string | null;
+  description: string;
+  features: string[];
+  usage_steps: string[];
+  pricing_tiers: PricingTier[];
+  software_file: string | null;
+  software_file_name: string | null;
+  software_file_size: string | null;
+  external_download_url: string;
+  is_new: boolean;
+  trial_days: number;
+  version: string;
+  guide_url: string;
+};
+
+function rowToProduct(row: ProductRow): Product {
+  return {
+    id: row.id,
+    name: row.name,
+    tagline: row.tagline,
+    category: row.category,
+    price: row.price,
+    rating: row.rating,
+    image: row.image,
+    description: row.description,
+    features: row.features ?? [],
+    usageSteps: row.usage_steps ?? [],
+    pricingTiers: row.pricing_tiers ?? [],
+    softwareFile: row.software_file,
+    softwareFileName: row.software_file_name,
+    softwareFileSize: row.software_file_size,
+    externalDownloadUrl: row.external_download_url ?? "",
+    isNew: row.is_new,
+    trialDays: row.trial_days,
+    version: row.version ?? "",
+    guideUrl: row.guide_url ?? "",
+  };
 }
 
-export function getProducts(): Promise<Product[]> {
-  return readJson<Product[]>(PRODUCTS_FILE);
+function productToRow(product: Product): ProductRow {
+  return {
+    id: product.id,
+    name: product.name,
+    tagline: product.tagline,
+    category: product.category,
+    price: product.price,
+    rating: product.rating,
+    image: product.image,
+    description: product.description,
+    features: product.features,
+    usage_steps: product.usageSteps,
+    pricing_tiers: product.pricingTiers,
+    software_file: product.softwareFile,
+    software_file_name: product.softwareFileName,
+    software_file_size: product.softwareFileSize,
+    external_download_url: product.externalDownloadUrl,
+    is_new: product.isNew,
+    trial_days: product.trialDays,
+    version: product.version,
+    guide_url: product.guideUrl,
+  };
+}
+
+export async function getProducts(): Promise<Product[]> {
+  const { data, error } = await supabase()
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data as ProductRow[]).map(rowToProduct);
 }
 
 export async function getProduct(id: string): Promise<Product | null> {
-  const products = await getProducts();
-  return products.find((product) => product.id === id) ?? null;
+  const { data, error } = await supabase()
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? rowToProduct(data as ProductRow) : null;
 }
 
-export function saveProducts(products: Product[]): Promise<void> {
-  return writeJson(PRODUCTS_FILE, products);
+export async function insertProduct(product: Product): Promise<void> {
+  const { error } = await supabase().from("products").insert(productToRow(product));
+  if (error) throw error;
 }
 
-export function getSiteContent(): Promise<SiteContent> {
-  return readJson<SiteContent>(SITE_FILE);
+export async function updateProductRow(
+  id: string,
+  fields: Omit<Product, "id">,
+): Promise<void> {
+  const row = productToRow({ id, ...fields });
+  const { error } = await supabase().from("products").update(row).eq("id", id);
+  if (error) throw error;
 }
 
-export function saveSiteContent(content: SiteContent): Promise<void> {
-  return writeJson(SITE_FILE, content);
+export async function deleteProductRow(id: string): Promise<void> {
+  const { error } = await supabase().from("products").delete().eq("id", id);
+  if (error) throw error;
 }
 
 export function createProductId(): string {
   return randomUUID();
 }
 
-/** Trả về [] nếu file chưa tồn tại (chưa có yêu cầu liên hệ nào). */
+// ---------------------------------------------------------------------------
+// Nội dung trang chủ / liên hệ (bảng chỉ có 1 dòng, id = 1)
+// ---------------------------------------------------------------------------
+
+export async function getSiteContent(): Promise<SiteContent> {
+  const { data, error } = await supabase()
+    .from("site_content")
+    .select("hero, contact")
+    .eq("id", 1)
+    .maybeSingle();
+  if (error) throw error;
+  return {
+    hero: (data?.hero as SiteContent["hero"]) ?? null,
+    contact: (data?.contact as SiteContent["contact"]) ?? null,
+  } as SiteContent;
+}
+
+export async function saveSiteContent(content: SiteContent): Promise<void> {
+  const { error } = await supabase()
+    .from("site_content")
+    .upsert({ id: 1, hero: content.hero, contact: content.contact });
+  if (error) throw error;
+}
+
+// ---------------------------------------------------------------------------
+// Yêu cầu liên hệ
+// ---------------------------------------------------------------------------
+
+type ContactRow = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  submitted_at: string;
+};
+
+function rowToContact(row: ContactRow): ContactSubmission {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    message: row.message,
+    submittedAt: row.submitted_at,
+  };
+}
+
 export async function getContactSubmissions(): Promise<ContactSubmission[]> {
-  try {
-    return await readJson<ContactSubmission[]>(CONTACTS_FILE);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
-    throw error;
-  }
+  const { data, error } = await supabase()
+    .from("contacts")
+    .select("*")
+    .order("submitted_at", { ascending: false });
+  if (error) throw error;
+  return (data as ContactRow[]).map(rowToContact);
 }
 
 export async function addContactSubmission(
   fields: Omit<ContactSubmission, "id" | "submittedAt">,
 ): Promise<ContactSubmission> {
-  const submissions = await getContactSubmissions();
-  const entry: ContactSubmission = {
-    id: randomUUID(),
-    submittedAt: new Date().toISOString(),
-    ...fields,
-  };
-  submissions.unshift(entry);
-  await fs.mkdir(STORE_DIR, { recursive: true });
-  await writeJson(CONTACTS_FILE, submissions);
-  return entry;
+  const { data, error } = await supabase()
+    .from("contacts")
+    .insert({ name: fields.name, email: fields.email, phone: fields.phone, message: fields.message })
+    .select()
+    .single();
+  if (error) throw error;
+  return rowToContact(data as ContactRow);
 }
 
 export async function deleteContactSubmission(id: string): Promise<void> {
-  const submissions = await getContactSubmissions();
-  await writeJson(
-    CONTACTS_FILE,
-    submissions.filter((s) => s.id !== id),
-  );
+  const { error } = await supabase().from("contacts").delete().eq("id", id);
+  if (error) throw error;
 }
 
-/** Trả về [] nếu file chưa tồn tại (chưa có đơn hàng nào). */
+// ---------------------------------------------------------------------------
+// Đơn hàng thanh toán SePay
+// ---------------------------------------------------------------------------
+
+type OrderRow = {
+  id: string;
+  code: string;
+  product_name: string;
+  email: string;
+  amount: number;
+  status: "pending" | "paid";
+  created_at: string;
+  paid_at: string | null;
+  gateway_transaction_id: string | null;
+};
+
+function rowToOrder(row: OrderRow): Order {
+  return {
+    id: row.id,
+    code: row.code,
+    productName: row.product_name,
+    email: row.email,
+    amount: row.amount,
+    status: row.status,
+    createdAt: row.created_at,
+    paidAt: row.paid_at,
+    gatewayTransactionId: row.gateway_transaction_id,
+  };
+}
+
 export async function getOrders(): Promise<Order[]> {
-  try {
-    return await readJson<Order[]>(ORDERS_FILE);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
-    throw error;
-  }
+  const { data, error } = await supabase()
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data as OrderRow[]).map(rowToOrder);
 }
 
 export async function getOrder(id: string): Promise<Order | null> {
-  const orders = await getOrders();
-  return orders.find((o) => o.id === id) ?? null;
+  const { data, error } = await supabase().from("orders").select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data ? rowToOrder(data as OrderRow) : null;
 }
 
 /** Sinh mã ngắn dùng làm nội dung chuyển khoản, ví dụ "DH7K2M9P" — ngắn gọn để không bị ngân hàng cắt bớt. */
@@ -200,49 +352,56 @@ export async function createOrder(fields: {
   email: string;
   amount: number;
 }): Promise<Order> {
-  const orders = await getOrders();
-  const order: Order = {
-    id: randomUUID(),
-    code: createOrderCode(),
-    productName: fields.productName,
-    email: fields.email,
-    amount: fields.amount,
-    status: "pending",
-    createdAt: new Date().toISOString(),
-    paidAt: null,
-    gatewayTransactionId: null,
-  };
-  orders.unshift(order);
-  await fs.mkdir(STORE_DIR, { recursive: true });
-  await writeJson(ORDERS_FILE, orders);
-  return order;
+  const { data, error } = await supabase()
+    .from("orders")
+    .insert({
+      code: createOrderCode(),
+      product_name: fields.productName,
+      email: fields.email,
+      amount: fields.amount,
+      status: "pending",
+    })
+    .select()
+    .single();
+  if (error) throw error;
+  return rowToOrder(data as OrderRow);
 }
 
 /** Tìm đơn theo mã chuyển khoản xuất hiện trong nội dung giao dịch ngân hàng (webhook SePay gửi về). */
 export async function findOrderByTransferContent(content: string): Promise<Order | null> {
   const normalized = content.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  const orders = await getOrders();
-  return (
-    orders.find(
-      (o) => o.status === "pending" && normalized.includes(o.code.toUpperCase()),
-    ) ?? null
-  );
+
+  const { data, error } = await supabase()
+    .from("orders")
+    .select("*")
+    .eq("status", "pending");
+  if (error) throw error;
+
+  const match = (data as OrderRow[]).find((row) => normalized.includes(row.code.toUpperCase()));
+  return match ? rowToOrder(match) : null;
 }
 
 export async function markOrderPaid(id: string, gatewayTransactionId: string): Promise<void> {
-  const orders = await getOrders();
-  const index = orders.findIndex((o) => o.id === id);
-  if (index === -1) return;
-  orders[index] = {
-    ...orders[index],
-    status: "paid",
-    paidAt: new Date().toISOString(),
-    gatewayTransactionId,
-  };
-  await writeJson(ORDERS_FILE, orders);
+  const { error } = await supabase()
+    .from("orders")
+    .update({
+      status: "paid",
+      paid_at: new Date().toISOString(),
+      gateway_transaction_id: gatewayTransactionId,
+    })
+    .eq("id", id);
+  if (error) throw error;
 }
 
-/** Lưu ảnh sản phẩm được upload vào public/uploads/products và trả về đường dẫn public. */
+// ---------------------------------------------------------------------------
+// Upload ảnh sản phẩm / tệp phần mềm — lưu trên Supabase Storage vì filesystem
+// của server (đặc biệt Vercel) không bền vững / không ghi được lúc chạy production.
+// ---------------------------------------------------------------------------
+
+function isManagedStorageUrl(url: string | null, bucket: string): boolean {
+  return Boolean(url && url.includes(`/storage/v1/object/public/${bucket}/`));
+}
+
 export async function saveProductImage(file: File): Promise<string> {
   if (file.size > MAX_IMAGE_BYTES) {
     throw new Error("Ảnh vượt quá dung lượng cho phép (tối đa 5MB).");
@@ -252,19 +411,22 @@ export async function saveProductImage(file: File): Promise<string> {
     throw new Error("Định dạng ảnh không hỗ trợ. Chỉ chấp nhận JPG, PNG, WEBP hoặc GIF.");
   }
 
-  await fs.mkdir(UPLOADS_DIR, { recursive: true });
   const filename = `${randomUUID()}${extension}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(UPLOADS_DIR, filename), buffer);
+  const { error } = await supabase()
+    .storage.from(PRODUCT_IMAGES_BUCKET)
+    .upload(filename, file, { contentType: file.type, upsert: false });
+  if (error) throw error;
 
-  return `/uploads/products/${filename}`;
+  const { data } = supabase().storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(filename);
+  return data.publicUrl;
 }
 
-/** Xoá ảnh sản phẩm cũ trên đĩa (bỏ qua nếu không tồn tại hoặc không thuộc thư mục upload). */
+/** Xoá ảnh sản phẩm cũ trên Supabase Storage (bỏ qua nếu không thuộc bucket quản lý — vd. ảnh seed thủ công). */
 export async function deleteProductImage(imagePath: string | null): Promise<void> {
-  if (!imagePath || !imagePath.startsWith("/uploads/products/")) return;
-  const filePath = path.join(process.cwd(), "public", imagePath);
-  await fs.unlink(filePath).catch(() => undefined);
+  if (!isManagedStorageUrl(imagePath, PRODUCT_IMAGES_BUCKET)) return;
+  const filename = imagePath!.split(`/${PRODUCT_IMAGES_BUCKET}/`).pop();
+  if (!filename) return;
+  await supabase().storage.from(PRODUCT_IMAGES_BUCKET).remove([filename]);
 }
 
 function formatFileSize(bytes: number): string {
@@ -272,35 +434,33 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/** Lưu tệp phần mềm (bản dùng thử) được quản trị viên tải lên vào public/uploads/software. */
+/** Lưu tệp phần mềm (bản dùng thử) được quản trị viên tải lên vào Supabase Storage. */
 export async function saveProductFile(
   file: File,
 ): Promise<{ path: string; originalName: string; size: string }> {
   if (file.size > MAX_SOFTWARE_BYTES) {
     throw new Error("Tệp phần mềm vượt quá dung lượng cho phép (tối đa 200MB).");
   }
-  const extension = path.extname(file.name).toLowerCase();
+  const extension = extname(file.name);
   if (!ALLOWED_SOFTWARE_EXTENSIONS.has(extension)) {
     throw new Error(
       "Định dạng tệp không hỗ trợ. Chỉ chấp nhận ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR hoặc GZ.",
     );
   }
 
-  await fs.mkdir(SOFTWARE_DIR, { recursive: true });
   const filename = `${randomUUID()}${extension}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(SOFTWARE_DIR, filename), buffer);
+  const { error } = await supabase()
+    .storage.from(SOFTWARE_FILES_BUCKET)
+    .upload(filename, file, { contentType: "application/octet-stream", upsert: false });
+  if (error) throw error;
 
-  return {
-    path: `/uploads/software/${filename}`,
-    originalName: file.name,
-    size: formatFileSize(file.size),
-  };
+  const { data } = supabase().storage.from(SOFTWARE_FILES_BUCKET).getPublicUrl(filename);
+  return { path: data.publicUrl, originalName: file.name, size: formatFileSize(file.size) };
 }
 
-/** Xoá tệp phần mềm cũ trên đĩa (bỏ qua nếu không tồn tại hoặc không thuộc thư mục upload). */
 export async function deleteProductFile(filePath: string | null): Promise<void> {
-  if (!filePath || !filePath.startsWith("/uploads/software/")) return;
-  const fullPath = path.join(process.cwd(), "public", filePath);
-  await fs.unlink(fullPath).catch(() => undefined);
+  if (!isManagedStorageUrl(filePath, SOFTWARE_FILES_BUCKET)) return;
+  const filename = filePath!.split(`/${SOFTWARE_FILES_BUCKET}/`).pop();
+  if (!filename) return;
+  await supabase().storage.from(SOFTWARE_FILES_BUCKET).remove([filename]);
 }
