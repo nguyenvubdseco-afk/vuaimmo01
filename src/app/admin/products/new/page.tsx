@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { productCategories } from "@/data/content";
 import { createProduct } from "@/app/admin/actions";
-import SoftwareFileInput from "@/app/admin/SoftwareFileInput";
+import AdminFileUpload from "@/app/admin/AdminFileUpload";
 
 export default function NewProductPage() {
   const categories = productCategories.filter((c) => c !== "Tất cả");
@@ -75,16 +75,17 @@ export default function NewProductPage() {
           </label>
         </div>
 
-        <label className="flex flex-col gap-1.5 text-sm">
+        <div className="flex flex-col gap-1.5 text-sm">
           <span className="font-medium">Ảnh sản phẩm (tuỳ chọn)</span>
-          <input
-            type="file"
-            name="image"
+          <AdminFileUpload
+            kind="image"
+            fieldName="image"
             accept="image/jpeg,image/png,image/webp,image/gif"
-            className="text-sm text-muted file:mr-3 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white"
           />
-          <span className="text-xs text-muted">Không chọn ảnh sẽ dùng khối màu mặc định.</span>
-        </label>
+          <span className="text-xs text-muted">
+            Không chọn ảnh sẽ dùng khối màu mặc định. Tối đa 5MB.
+          </span>
+        </div>
 
         <div className="border-t border-border pt-4">
           <h2 className="text-sm font-semibold text-accent-2">Trang chi tiết sản phẩm</h2>
@@ -199,9 +200,15 @@ export default function NewProductPage() {
 
         <div className="flex flex-col gap-1.5 text-sm">
           <span className="font-medium">Hoặc tải tệp cài đặt lên trực tiếp (tuỳ chọn)</span>
-          <SoftwareFileInput />
+          <AdminFileUpload
+            kind="software"
+            fieldName="softwareFile"
+            accept=".zip,.rar,.7z,.exe,.msi,.dmg,.apk,.tar,.gz"
+            triggerLabel="Tải lên"
+            withMetaFields
+          />
           <span className="text-xs text-muted">
-            Hỗ trợ ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR, GZ — tối đa 200MB.
+            Hỗ trợ ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR, GZ — tối đa 50MB.
           </span>
         </div>
 

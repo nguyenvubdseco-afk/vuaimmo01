@@ -37,14 +37,20 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 
 const PRODUCT_IMAGES_BUCKET = "product-images";
 
+// Giới hạn dung lượng ở cấp bucket — 50MB là mức tối đa gói Supabase Free cho phép
+// cho mỗi file, dù bucket có khai báo cao hơn cũng bị chặn.
+const BUCKET_LIMITS = {
+  "product-images": "5MB",
+  "software-files": "50MB",
+};
+
 async function ensureBuckets() {
-  const buckets = ["product-images", "software-files"];
-  for (const bucket of buckets) {
+  for (const [bucket, fileSizeLimit] of Object.entries(BUCKET_LIMITS)) {
     const { data: existing } = await supabase.storage.getBucket(bucket);
     if (!existing) {
-      const { error } = await supabase.storage.createBucket(bucket, { public: true });
+      const { error } = await supabase.storage.createBucket(bucket, { public: true, fileSizeLimit });
       if (error) throw error;
-      console.log(`Đã tạo bucket "${bucket}"`);
+      console.log(`Đã tạo bucket "${bucket}" (tối đa ${fileSizeLimit})`);
     }
   }
 }

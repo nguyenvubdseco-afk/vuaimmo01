@@ -74,17 +74,18 @@ export type SiteContent = {
 const PRODUCT_IMAGES_BUCKET = "product-images";
 const SOFTWARE_FILES_BUCKET = "software-files";
 
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+// Giới hạn dung lượng thực tế được enforce ở cấp bucket Supabase Storage (xem
+// scripts/seed-supabase.mjs) vì file giờ tải thẳng lên Storage, không qua server nữa.
 const ALLOWED_IMAGE_TYPES: Record<string, string> = {
   "image/jpeg": ".jpg",
   "image/png": ".png",
   "image/webp": ".webp",
   "image/gif": ".gif",
 };
+const ALLOWED_IMAGE_EXTENSIONS = new Set(Object.values(ALLOWED_IMAGE_TYPES));
 
 // Trình duyệt thường không gửi MIME type đáng tin cậy cho các định dạng này
 // (hay báo application/octet-stream), nên xét theo phần mở rộng tên tệp gốc.
-const MAX_SOFTWARE_BYTES = 200 * 1024 * 1024;
 const ALLOWED_SOFTWARE_EXTENSIONS = new Set([
   ".zip",
   ".rar",
@@ -402,23 +403,39 @@ function isManagedStorageUrl(url: string | null, bucket: string): boolean {
   return Boolean(url && url.includes(`/storage/v1/object/public/${bucket}/`));
 }
 
-export async function saveProductImage(file: File): Promise<string> {
-  if (file.size > MAX_IMAGE_BYTES) {
-    throw new Error("Ảnh vượt quá dung lượng cho phép (tối đa 5MB).");
-  }
-  const extension = ALLOWED_IMAGE_TYPES[file.type];
-  if (!extension) {
+export type UploadKind = "image" | "software";
+
+function bucketForKind(kind: UploadKind): string {
+  return kind === "image" ? PRODUCT_IMAGES_BUCKET : SOFTWARE_FILES_BUCKET;
+}
+
+/**
+ * Tạo signed URL để trình duyệt tải file THẲNG lên Supabase Storage, không đi qua server.
+ * Bắt buộc phải làm vậy vì Vercel giới hạn cứng mỗi request qua Serverless Function chỉ
+ * tối đa 4.5MB — ảnh/tệp phần mềm lớn hơn sẽ bị chặn nếu gửi qua server action thông thường.
+ */
+export async function createSignedUpload(
+  kind: UploadKind,
+  originalName: string,
+): Promise<{ bucket: string; path: string; token: string; publicUrl: string }> {
+  const extension = extname(originalName);
+  if (kind === "image" && !ALLOWED_IMAGE_EXTENSIONS.has(extension)) {
     throw new Error("Định dạng ảnh không hỗ trợ. Chỉ chấp nhận JPG, PNG, WEBP hoặc GIF.");
   }
+  if (kind === "software" && !ALLOWED_SOFTWARE_EXTENSIONS.has(extension)) {
+    throw new Error(
+      "Định dạng tệp không hỗ trợ. Chỉ chấp nhận ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR hoặc GZ.",
+    );
+  }
 
+  const bucket = bucketForKind(kind);
   const filename = `${randomUUID()}${extension}`;
-  const { error } = await supabase()
-    .storage.from(PRODUCT_IMAGES_BUCKET)
-    .upload(filename, file, { contentType: file.type, upsert: false });
+
+  const { data, error } = await supabase().storage.from(bucket).createSignedUploadUrl(filename);
   if (error) throw error;
 
-  const { data } = supabase().storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(filename);
-  return data.publicUrl;
+  const { data: publicData } = supabase().storage.from(bucket).getPublicUrl(filename);
+  return { bucket, path: filename, token: data.token, publicUrl: publicData.publicUrl };
 }
 
 /** Xoá ảnh sản phẩm cũ trên Supabase Storage (bỏ qua nếu không thuộc bucket quản lý — vd. ảnh seed thủ công). */
@@ -427,35 +444,6 @@ export async function deleteProductImage(imagePath: string | null): Promise<void
   const filename = imagePath!.split(`/${PRODUCT_IMAGES_BUCKET}/`).pop();
   if (!filename) return;
   await supabase().storage.from(PRODUCT_IMAGES_BUCKET).remove([filename]);
-}
-
-function formatFileSize(bytes: number): string {
-  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-/** Lưu tệp phần mềm (bản dùng thử) được quản trị viên tải lên vào Supabase Storage. */
-export async function saveProductFile(
-  file: File,
-): Promise<{ path: string; originalName: string; size: string }> {
-  if (file.size > MAX_SOFTWARE_BYTES) {
-    throw new Error("Tệp phần mềm vượt quá dung lượng cho phép (tối đa 200MB).");
-  }
-  const extension = extname(file.name);
-  if (!ALLOWED_SOFTWARE_EXTENSIONS.has(extension)) {
-    throw new Error(
-      "Định dạng tệp không hỗ trợ. Chỉ chấp nhận ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR hoặc GZ.",
-    );
-  }
-
-  const filename = `${randomUUID()}${extension}`;
-  const { error } = await supabase()
-    .storage.from(SOFTWARE_FILES_BUCKET)
-    .upload(filename, file, { contentType: "application/octet-stream", upsert: false });
-  if (error) throw error;
-
-  const { data } = supabase().storage.from(SOFTWARE_FILES_BUCKET).getPublicUrl(filename);
-  return { path: data.publicUrl, originalName: file.name, size: formatFileSize(file.size) };
 }
 
 export async function deleteProductFile(filePath: string | null): Promise<void> {

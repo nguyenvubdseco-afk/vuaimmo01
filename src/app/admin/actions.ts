@@ -10,6 +10,7 @@ import {
 import { verifyAdminPassword } from "@/lib/auth-cookie";
 import {
   createProductId,
+  createSignedUpload,
   deleteContactSubmission,
   deleteProductFile,
   deleteProductImage,
@@ -17,12 +18,11 @@ import {
   getProduct,
   getSiteContent,
   insertProduct,
-  saveProductFile,
-  saveProductImage,
   saveSiteContent,
   updateProductRow,
   type PricingTier,
   type Product,
+  type UploadKind,
 } from "@/lib/store";
 
 async function requireAuth() {
@@ -52,6 +52,16 @@ export async function login(formData: FormData) {
 export async function logout() {
   await clearAdminSessionCookie();
   redirect("/admin/login");
+}
+
+/**
+ * Gọi từ trình duyệt trước khi upload — trả về URL có chữ ký để trình duyệt tải file
+ * THẲNG lên Supabase Storage (không đi qua server), vì Vercel giới hạn mỗi request qua
+ * Serverless Function tối đa 4.5MB.
+ */
+export async function requestSignedUpload(kind: UploadKind, originalName: string) {
+  await requireAuth();
+  return createSignedUpload(kind, originalName);
 }
 
 type ProductFields = Omit<
@@ -118,22 +128,16 @@ export async function createProduct(formData: FormData) {
   await requireAuth();
   const fields = parseProductFields(formData);
 
-  let image: string | null = null;
-  const imageFile = formData.get("image");
-  if (imageFile instanceof File && imageFile.size > 0) {
-    image = await saveProductImage(imageFile);
-  }
-
-  let softwareFile: string | null = null;
-  let softwareFileName: string | null = null;
-  let softwareFileSize: string | null = null;
-  const uploadedFile = formData.get("softwareFile");
-  if (uploadedFile instanceof File && uploadedFile.size > 0) {
-    const saved = await saveProductFile(uploadedFile);
-    softwareFile = saved.path;
-    softwareFileName = saved.originalName;
-    softwareFileSize = saved.size;
-  }
+  // Ảnh/tệp phần mềm đã được trình duyệt tải thẳng lên Supabase Storage trước khi submit
+  // form này (xem AdminFileUpload) — ở đây chỉ nhận lại URL kết quả (chuỗi text nhỏ).
+  const image = String(formData.get("image") ?? "").trim() || null;
+  const softwareFile = String(formData.get("softwareFile") ?? "").trim() || null;
+  const softwareFileName = softwareFile
+    ? String(formData.get("softwareFileOriginalName") ?? "").trim() || null
+    : null;
+  const softwareFileSize = softwareFile
+    ? String(formData.get("softwareFileSizeLabel") ?? "").trim() || null
+    : null;
 
   const newId = createProductId();
   await insertProduct({
@@ -158,12 +162,12 @@ export async function updateProduct(id: string, formData: FormData) {
   if (!existing) throw new Error("Không tìm thấy sản phẩm.");
 
   let image = existing.image;
-  const imageFile = formData.get("image");
+  const newImage = String(formData.get("image") ?? "").trim();
   const removeImage = formData.get("removeImage") === "on";
 
-  if (imageFile instanceof File && imageFile.size > 0) {
+  if (newImage) {
     await deleteProductImage(image);
-    image = await saveProductImage(imageFile);
+    image = newImage;
   } else if (removeImage) {
     await deleteProductImage(image);
     image = null;
@@ -172,15 +176,14 @@ export async function updateProduct(id: string, formData: FormData) {
   let softwareFile = existing.softwareFile;
   let softwareFileName = existing.softwareFileName;
   let softwareFileSize = existing.softwareFileSize;
-  const uploadedFile = formData.get("softwareFile");
+  const newSoftwareFile = String(formData.get("softwareFile") ?? "").trim();
   const removeSoftwareFile = formData.get("removeSoftwareFile") === "on";
 
-  if (uploadedFile instanceof File && uploadedFile.size > 0) {
+  if (newSoftwareFile) {
     await deleteProductFile(softwareFile);
-    const saved = await saveProductFile(uploadedFile);
-    softwareFile = saved.path;
-    softwareFileName = saved.originalName;
-    softwareFileSize = saved.size;
+    softwareFile = newSoftwareFile;
+    softwareFileName = String(formData.get("softwareFileOriginalName") ?? "").trim() || null;
+    softwareFileSize = String(formData.get("softwareFileSizeLabel") ?? "").trim() || null;
   } else if (removeSoftwareFile) {
     await deleteProductFile(softwareFile);
     softwareFile = null;

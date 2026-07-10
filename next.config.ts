@@ -3,9 +3,11 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      // Tệp phần mềm cho phép tối đa 200MB (xem MAX_SOFTWARE_BYTES trong src/lib/store.ts),
-      // để dư cho phần overhead của multipart/form-data (boundary, header từng field...).
-      bodySizeLimit: "210mb",
+      // Ảnh/tệp phần mềm giờ tải thẳng lên Supabase Storage từ trình duyệt (xem
+      // src/lib/uploadClient.ts), không đi qua server action nữa — vì Vercel giới hạn
+      // cứng mỗi request qua Serverless Function chỉ 4.5MB. Form action giờ chỉ nhận
+      // text (mô tả, tính năng...) nên không cần giới hạn cao.
+      bodySizeLimit: "2mb",
     },
   },
 };

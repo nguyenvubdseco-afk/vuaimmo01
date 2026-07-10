@@ -4,7 +4,7 @@ import { productCategories } from "@/data/content";
 import { getProduct } from "@/lib/store";
 import { updateProduct } from "@/app/admin/actions";
 import DeleteProductButton from "@/app/admin/DeleteProductButton";
-import SoftwareFileInput from "@/app/admin/SoftwareFileInput";
+import AdminFileUpload from "@/app/admin/AdminFileUpload";
 
 export default async function EditProductPage({
   params,
@@ -113,15 +113,15 @@ export default async function EditProductPage({
           )}
         </div>
 
-        <label className="flex flex-col gap-1.5 text-sm">
+        <div className="flex flex-col gap-1.5 text-sm">
           <span className="font-medium">Thay ảnh mới (tuỳ chọn)</span>
-          <input
-            type="file"
-            name="image"
+          <AdminFileUpload
+            kind="image"
+            fieldName="image"
             accept="image/jpeg,image/png,image/webp,image/gif"
-            className="text-sm text-muted file:mr-3 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white"
           />
-        </label>
+          <span className="text-xs text-muted">Tối đa 5MB.</span>
+        </div>
 
         <div className="border-t border-border pt-4">
           <h2 className="text-sm font-semibold text-accent-2">Trang chi tiết sản phẩm</h2>
@@ -265,9 +265,15 @@ export default async function EditProductPage({
 
         <div className="flex flex-col gap-1.5 text-sm">
           <span className="font-medium">Hoặc thay tệp cài đặt trực tiếp (tuỳ chọn)</span>
-          <SoftwareFileInput />
+          <AdminFileUpload
+            kind="software"
+            fieldName="softwareFile"
+            accept=".zip,.rar,.7z,.exe,.msi,.dmg,.apk,.tar,.gz"
+            triggerLabel="Tải lên"
+            withMetaFields
+          />
           <span className="text-xs text-muted">
-            Hỗ trợ ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR, GZ — tối đa 200MB.
+            Hỗ trợ ZIP, RAR, 7Z, EXE, MSI, DMG, APK, TAR, GZ — tối đa 50MB.
           </span>
         </div>
 
