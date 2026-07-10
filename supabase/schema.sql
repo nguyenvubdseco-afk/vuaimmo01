@@ -53,12 +53,21 @@ create table if not exists orders (
   gateway_transaction_id text
 );
 
+-- Mật khẩu quản trị (dạng hash) — đổi được ngay từ /admin, không cần sửa
+-- ADMIN_PASSWORD trong biến môi trường + deploy lại nữa. Bảng chỉ có đúng 1 dòng.
+create table if not exists admin_settings (
+  id integer primary key default 1,
+  password_hash text,
+  constraint admin_settings_singleton check (id = 1)
+);
+
 -- Bật Row Level Security và KHÔNG thêm policy nào — chặn hoàn toàn truy cập qua
 -- anon/public key. Server luôn dùng service role key (bỏ qua RLS) nên vẫn hoạt động bình thường.
 alter table products enable row level security;
 alter table site_content enable row level security;
 alter table contacts enable row level security;
 alter table orders enable row level security;
+alter table admin_settings enable row level security;
 
 -- Dòng nội dung mặc định cho site_content nếu bảng đang trống (server sẽ ghi đè giá trị
 -- thật qua trang /admin, đây chỉ là để tránh lỗi "không tìm thấy dòng" trong lần chạy đầu).

@@ -3,6 +3,7 @@ import { getContactSubmissions, getOrders, getProducts, getSiteContent } from "@
 import { logout, updateSiteContent } from "@/app/admin/actions";
 import DeleteProductButton from "@/app/admin/DeleteProductButton";
 import DeleteContactButton from "@/app/admin/DeleteContactButton";
+import ChangePasswordForm from "@/app/admin/ChangePasswordForm";
 
 export default async function AdminDashboardPage() {
   const [products, site, contacts, orders] = await Promise.all([
@@ -227,6 +228,8 @@ export default async function AdminDashboardPage() {
           )}
         </div>
       </section>
+
+      <ChangePasswordForm />
     </div>
   );
 }

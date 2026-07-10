@@ -19,11 +19,13 @@ import {
   getSiteContent,
   insertProduct,
   saveSiteContent,
+  setAdminPasswordHash,
   updateProductRow,
   type PricingTier,
   type Product,
   type UploadKind,
 } from "@/lib/store";
+import { hashPassword } from "@/lib/password";
 
 async function requireAuth() {
   if (!(await isAdminAuthenticated())) {
@@ -41,7 +43,7 @@ function revalidatePublicPages(productId?: string) {
 export async function login(formData: FormData) {
   const password = String(formData.get("password") ?? "");
 
-  if (!verifyAdminPassword(password)) {
+  if (!(await verifyAdminPassword(password))) {
     redirect("/admin/login?error=1");
   }
 
@@ -52,6 +54,34 @@ export async function login(formData: FormData) {
 export async function logout() {
   await clearAdminSessionCookie();
   redirect("/admin/login");
+}
+
+export type ChangePasswordState = { success: boolean; error?: string };
+
+export async function changeAdminPassword(
+  _prevState: ChangePasswordState,
+  formData: FormData,
+): Promise<ChangePasswordState> {
+  await requireAuth();
+
+  const currentPassword = String(formData.get("currentPassword") ?? "");
+  const newPassword = String(formData.get("newPassword") ?? "");
+  const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+  if (!(await verifyAdminPassword(currentPassword))) {
+    return { success: false, error: "Mật khẩu hiện tại không đúng." };
+  }
+  if (newPassword.length < 8) {
+    return { success: false, error: "Mật khẩu mới cần ít nhất 8 ký tự." };
+  }
+  if (newPassword !== confirmPassword) {
+    return { success: false, error: "Xác nhận mật khẩu mới không khớp." };
+  }
+
+  const hash = await hashPassword(newPassword);
+  await setAdminPasswordHash(hash);
+
+  return { success: true };
 }
 
 /**

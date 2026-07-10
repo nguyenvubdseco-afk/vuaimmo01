@@ -12,12 +12,13 @@ export async function isAdminAuthenticated() {
 
 export async function setAdminSessionCookie() {
   const store = await cookies();
+  // Không đặt maxAge/expires => cookie phiên (session cookie): trình duyệt tự xoá
+  // khi đóng hẳn trình duyệt (đóng toàn bộ cửa sổ), không cần đăng xuất thủ công.
   store.set(ADMIN_SESSION_COOKIE, createSessionCookieValue(), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 8,
   });
 }
 

@@ -1,6 +1,8 @@
 // Logic ký/xác minh cookie phiên admin — tách riêng khỏi auth.ts vì file này
 // cần chạy được cả trong proxy.ts (Node runtime, không có next/headers).
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { getAdminPasswordHash } from "@/lib/store";
+import { verifyPassword } from "@/lib/password";
 
 export const ADMIN_SESSION_COOKIE = "admin_session";
 
@@ -35,7 +37,17 @@ export function isValidSessionCookieValue(value: string | undefined | null) {
   return timingSafeEqual(expectedBuffer, actualBuffer);
 }
 
-export function verifyAdminPassword(password: string) {
+/**
+ * Kiểm tra mật khẩu quản trị — ưu tiên hash lưu trong DB (đổi được qua /admin).
+ * Nếu chưa từng đổi mật khẩu lần nào (chưa có hash trong DB), dùng ADMIN_PASSWORD
+ * trong biến môi trường làm mật khẩu khởi tạo.
+ */
+export async function verifyAdminPassword(password: string): Promise<boolean> {
+  const storedHash = await getAdminPasswordHash();
+  if (storedHash) {
+    return verifyPassword(password, storedHash);
+  }
+
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected) {
     throw new Error("ADMIN_PASSWORD chưa được cấu hình. Thêm biến này vào .env.local");

@@ -244,6 +244,27 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Mật khẩu quản trị — lưu dạng hash trong DB để đổi được ngay từ /admin, không
+// cần sửa biến môi trường ADMIN_PASSWORD + deploy lại nữa (env var chỉ còn dùng
+// làm mật khẩu khởi tạo cho tới lần đầu đổi mật khẩu qua giao diện).
+// ---------------------------------------------------------------------------
+
+export async function getAdminPasswordHash(): Promise<string | null> {
+  const { data, error } = await supabase()
+    .from("admin_settings")
+    .select("password_hash")
+    .eq("id", 1)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.password_hash ?? null;
+}
+
+export async function setAdminPasswordHash(hash: string): Promise<void> {
+  const { error } = await supabase().from("admin_settings").upsert({ id: 1, password_hash: hash });
+  if (error) throw error;
+}
+
+// ---------------------------------------------------------------------------
 // Yêu cầu liên hệ
 // ---------------------------------------------------------------------------
 
