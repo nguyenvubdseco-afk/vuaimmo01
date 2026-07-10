@@ -49,3 +49,6 @@ next-env.d.ts
 # ảnh tham khảo lưu tạm ở gốc project khi build UI, không phải asset của site
 /donguyenai.com_sanpham_tubebuilder.png
 /www.donguyenai.comOK.png
+
+.vercel
+.env*
