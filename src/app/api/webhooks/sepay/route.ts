@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findOrderByTransferContent, markOrderPaid } from "@/lib/store";
+import { escapeHtml, sendTelegramMessage } from "@/lib/telegram";
 
 // SePay gọi vào endpoint này mỗi khi tài khoản ngân hàng đã đăng ký nhận được giao dịch.
 // Cấu hình URL này (https://ten-mien-cua-ban.com/api/webhooks/sepay) trong mục Webhook
@@ -27,6 +28,14 @@ export async function POST(request: NextRequest) {
   if (order) {
     const transactionId = String(payload.id ?? payload.referenceCode ?? "");
     await markOrderPaid(order.id, transactionId);
+
+    await sendTelegramMessage(
+      `<b>Đơn hàng mới đã thanh toán</b>\n` +
+        `Sản phẩm: ${escapeHtml(order.productName)}\n` +
+        `Mã đơn: ${escapeHtml(order.code)}\n` +
+        `Email khách: ${escapeHtml(order.email)}\n` +
+        `Số tiền: ${order.amount.toLocaleString("vi-VN")}đ`,
+    );
   }
 
   // Luôn trả success:true cho SePay dù không khớp đơn nào, để tránh SePay gửi lại liên tục.
