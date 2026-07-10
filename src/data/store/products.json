@@ -1,0 +1,576 @@
+[
+  {
+    "id": "p01",
+    "name": "Sản phẩm AI 01",
+    "tagline": "Tạo nội dung marketing tự động bằng AI",
+    "category": "Chatbot & Prompt",
+    "price": "Miễn phí",
+    "rating": "4.9",
+    "image": "/uploads/products/039c7f76-3fee-4307-ab32-57d5815f43cb.png",
+    "description": "Sản phẩm AI 01 giúp đội ngũ marketing tạo nội dung quảng cáo, bài đăng mạng xã hội và email chỉ trong vài giây, giữ đúng giọng văn thương hiệu của bạn.",
+    "features": [
+      "Tạo nội dung theo giọng văn thương hiệu",
+      "Hỗ trợ đa ngôn ngữ",
+      "Tối ưu chuẩn SEO tự động",
+      "Kiểm tra đạo văn tích hợp",
+      "Xuất bản trực tiếp lên website/mạng xã hội",
+      "Lưu trữ và quản lý phiên bản nội dung"
+    ],
+    "usageSteps": [
+      "Đăng nhập vào tài khoản VU AI CREATOR của bạn",
+      "Chọn công cụ và nhập chủ đề hoặc từ khóa",
+      "Tùy chỉnh giọng văn và độ dài nội dung",
+      "Xem trước và chỉnh sửa nội dung được tạo",
+      "Xuất bản hoặc tải nội dung về máy"
+    ],
+    "pricingTiers": [
+      {
+        "label": "Gói cơ bản",
+        "price": "Miễn phí"
+      },
+      {
+        "label": "1 năm",
+        "price": "990.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "2.490.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": false,
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p02",
+    "name": "Sản phẩm AI 02",
+    "tagline": "Tạo hình ảnh sản phẩm chất lượng cao",
+    "category": "Tool & App",
+    "price": "299.000đ",
+    "rating": "4.8",
+    "image": "/uploads/products/2b8f9d7f-fe1b-4695-ac34-5aa08a2f388a.png",
+    "description": "Sản phẩm AI 02 biến ảnh chụp sản phẩm thông thường thành hình ảnh studio chuyên nghiệp, sẵn sàng đăng bán trên mọi nền tảng thương mại điện tử.",
+    "features": [
+      "Tạo ảnh độ phân giải cao",
+      "Xóa phông nền tự động",
+      "Áp dụng phong cách thương hiệu nhất quán",
+      "Chỉnh sửa hàng loạt cùng lúc",
+      "Xuất nhiều định dạng (PNG, JPG, WEBP)",
+      "Thư viện mẫu đa dạng"
+    ],
+    "usageSteps": [
+      "Tải ảnh gốc hoặc chọn mẫu có sẵn",
+      "Chọn phong cách hoặc bố cục mong muốn",
+      "Để AI xử lý và tạo phiên bản mới",
+      "Tinh chỉnh chi tiết theo ý bạn",
+      "Tải xuống hoặc xuất thẳng vào kho ảnh"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "299.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "2.390.000đ",
+        "note": "Tiết kiệm hơn dùng theo tháng"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "5.990.000đ",
+        "note": "Mua 1 lần, dùng mãi"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 7,
+    "version": "1.2.0",
+    "isNew": true,
+    "guideUrl": "#",
+    "externalDownloadUrl": "https://docs.google.com/document/d/1tavMkeiSh8Te9naaIt-eQBVab9PLaN5_GPyRo5NlX28/edit?usp=sharing"
+  },
+  {
+    "id": "p03",
+    "name": "Sản phẩm AI 03",
+    "tagline": "Phân tích dữ liệu kinh doanh theo thời gian thực",
+    "category": "Tool & App",
+    "price": "499.000đ",
+    "rating": "4.7",
+    "image": null,
+    "description": "Sản phẩm AI 03 tổng hợp dữ liệu bán hàng, vận hành và khách hàng thành báo cáo trực quan, giúp bạn ra quyết định nhanh và chính xác hơn.",
+    "features": [
+      "Kết nối trực tiếp với nguồn dữ liệu doanh nghiệp",
+      "Biểu đồ trực quan cập nhật theo thời gian thực",
+      "Cảnh báo bất thường tự động",
+      "Dự báo xu hướng bằng mô hình AI",
+      "Xuất báo cáo định kỳ tự động",
+      "Phân quyền xem theo từng phòng ban"
+    ],
+    "usageSteps": [
+      "Kết nối nguồn dữ liệu của bạn",
+      "Chọn chỉ số cần theo dõi",
+      "Để AI phân tích và tạo báo cáo",
+      "Xem trực quan hóa trên bảng điều khiển",
+      "Chia sẻ báo cáo với đội ngũ"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "499.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "3.990.000đ",
+        "note": "Tiết kiệm hơn dùng theo tháng"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "9.990.000đ",
+        "note": "Mua 1 lần, dùng mãi"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 5,
+    "version": "1.0.0",
+    "isNew": true,
+    "guideUrl": "#",
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p04",
+    "name": "Sản phẩm AI 04",
+    "tagline": "Tự động hóa quy trình chăm sóc khách hàng",
+    "category": "Sản phẩm số",
+    "price": "Miễn phí",
+    "rating": "4.9",
+    "image": null,
+    "description": "Sản phẩm AI 04 tự động tiếp nhận, phân loại và trả lời yêu cầu của khách hàng trên nhiều kênh, giúp đội ngũ hỗ trợ tập trung vào các vấn đề quan trọng hơn.",
+    "features": [
+      "Xây dựng luồng tự động không cần code",
+      "Tích hợp với các kênh nhắn tin phổ biến",
+      "Trả lời khách hàng theo thời gian thực",
+      "Phân loại yêu cầu tự động",
+      "Báo cáo hiệu quả vận hành",
+      "Hoạt động 24/7 không gián đoạn"
+    ],
+    "usageSteps": [
+      "Kết nối kênh chăm sóc khách hàng của bạn",
+      "Thiết lập kịch bản tự động hóa",
+      "Huấn luyện AI theo dữ liệu thực tế",
+      "Kích hoạt và theo dõi hiệu quả",
+      "Tối ưu liên tục dựa trên phản hồi"
+    ],
+    "pricingTiers": [
+      {
+        "label": "Gói cơ bản",
+        "price": "Miễn phí"
+      },
+      {
+        "label": "1 năm",
+        "price": "890.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "2.190.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": false,
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p05",
+    "name": "Sản phẩm AI 05",
+    "tagline": "Viết kịch bản video ngắn trong vài giây",
+    "category": "Chatbot & Prompt",
+    "price": "199.000đ",
+    "rating": "4.6",
+    "image": null,
+    "description": "Sản phẩm AI 05 giúp nhà sáng tạo nội dung viết kịch bản video ngắn hấp dẫn cho TikTok, Reels và Shorts chỉ trong vài giây, theo đúng xu hướng hiện tại.",
+    "features": [
+      "Tạo nội dung theo giọng văn thương hiệu",
+      "Hỗ trợ đa ngôn ngữ",
+      "Gợi ý xu hướng nội dung theo thời gian thực",
+      "Kiểm tra đạo văn tích hợp",
+      "Xuất kịch bản theo định dạng chuẩn quay dựng",
+      "Lưu trữ và quản lý phiên bản nội dung"
+    ],
+    "usageSteps": [
+      "Đăng nhập vào tài khoản AI System Creator của bạn",
+      "Chọn chủ đề hoặc dán ý tưởng video",
+      "Chọn độ dài và phong cách kịch bản",
+      "Xem trước và chỉnh sửa kịch bản được tạo",
+      "Xuất bản hoặc tải kịch bản về máy"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "199.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "1.590.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "3.990.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": false,
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p06",
+    "name": "Sản phẩm AI 06",
+    "tagline": "Chỉnh sửa ảnh sản phẩm hàng loạt",
+    "category": "Tool & App",
+    "price": "349.000đ",
+    "rating": "4.8",
+    "image": null,
+    "description": "Sản phẩm AI 06 xử lý hàng trăm ảnh sản phẩm cùng lúc — cắt nền, căn chỉnh ánh sáng và đồng bộ phong cách — chỉ với một cú nhấp chuột.",
+    "features": [
+      "Tạo ảnh độ phân giải cao",
+      "Xóa phông nền tự động",
+      "Áp dụng phong cách thương hiệu nhất quán",
+      "Chỉnh sửa hàng loạt cùng lúc",
+      "Xuất nhiều định dạng (PNG, JPG, WEBP)",
+      "Thư viện mẫu đa dạng"
+    ],
+    "usageSteps": [
+      "Tải lên hàng loạt ảnh sản phẩm",
+      "Chọn bộ lọc và phong cách áp dụng chung",
+      "Để AI xử lý toàn bộ ảnh cùng lúc",
+      "Kiểm tra và tinh chỉnh từng ảnh nếu cần",
+      "Tải xuống toàn bộ hoặc xuất theo lô"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "349.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "2.790.000đ",
+        "note": "Tiết kiệm hơn dùng theo tháng"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "6.990.000đ",
+        "note": "Mua 1 lần, dùng mãi"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 7,
+    "version": "2.1.0",
+    "isNew": false,
+    "guideUrl": "#",
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p07",
+    "name": "Sản phẩm AI 07",
+    "tagline": "Trực quan hóa dữ liệu bán hàng tự động",
+    "category": "Tool & App",
+    "price": "399.000đ",
+    "rating": "4.7",
+    "image": null,
+    "description": "Sản phẩm AI 07 biến dữ liệu bán hàng thô thành biểu đồ và bảng điều khiển trực quan, giúp đội ngũ kinh doanh theo dõi hiệu quả theo thời gian thực.",
+    "features": [
+      "Kết nối trực tiếp với nguồn dữ liệu doanh nghiệp",
+      "Biểu đồ trực quan cập nhật theo thời gian thực",
+      "Cảnh báo bất thường tự động",
+      "Dự báo xu hướng bằng mô hình AI",
+      "Xuất báo cáo định kỳ tự động",
+      "Phân quyền xem theo từng phòng ban"
+    ],
+    "usageSteps": [
+      "Kết nối nguồn dữ liệu bán hàng của bạn",
+      "Chọn chỉ số cần theo dõi",
+      "Để AI phân tích và tạo biểu đồ",
+      "Xem trực quan hóa trên bảng điều khiển",
+      "Chia sẻ báo cáo với đội ngũ kinh doanh"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "399.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "3.190.000đ",
+        "note": "Tiết kiệm hơn dùng theo tháng"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "7.990.000đ",
+        "note": "Mua 1 lần, dùng mãi"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 5,
+    "version": "1.4.0",
+    "isNew": false,
+    "guideUrl": "#",
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p08",
+    "name": "Sản phẩm AI 08",
+    "tagline": "Tự động trả lời tin nhắn đa kênh",
+    "category": "Chatbot & Prompt",
+    "price": "Miễn phí",
+    "rating": "4.9",
+    "image": null,
+    "description": "Sản phẩm AI 08 hợp nhất tin nhắn từ Facebook, Zalo, website và email vào một nơi, tự động trả lời khách hàng theo kịch bản bạn thiết lập.",
+    "features": [
+      "Xây dựng luồng tự động không cần code",
+      "Tích hợp với các kênh nhắn tin phổ biến",
+      "Trả lời khách hàng theo thời gian thực",
+      "Phân loại yêu cầu tự động",
+      "Báo cáo hiệu quả vận hành",
+      "Hoạt động 24/7 không gián đoạn"
+    ],
+    "usageSteps": [
+      "Kết nối các kênh nhắn tin của bạn",
+      "Thiết lập kịch bản trả lời tự động",
+      "Huấn luyện AI theo dữ liệu thực tế",
+      "Kích hoạt và theo dõi hiệu quả",
+      "Tối ưu liên tục dựa trên phản hồi"
+    ],
+    "pricingTiers": [
+      {
+        "label": "Gói cơ bản",
+        "price": "Miễn phí"
+      },
+      {
+        "label": "1 năm",
+        "price": "1.190.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "2.990.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": false,
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p09",
+    "name": "Sản phẩm AI 09",
+    "tagline": "Sinh bài viết chuẩn SEO theo từ khóa",
+    "category": "Chatbot & Prompt",
+    "price": "249.000đ",
+    "rating": "4.8",
+    "image": null,
+    "description": "Sản phẩm AI 09 nghiên cứu từ khóa và tạo bài viết chuẩn SEO hoàn chỉnh, giúp website của bạn lên top tìm kiếm nhanh hơn.",
+    "features": [
+      "Tạo nội dung theo giọng văn thương hiệu",
+      "Hỗ trợ đa ngôn ngữ",
+      "Tối ưu chuẩn SEO tự động",
+      "Kiểm tra đạo văn tích hợp",
+      "Xuất bản trực tiếp lên website/mạng xã hội",
+      "Lưu trữ và quản lý phiên bản nội dung"
+    ],
+    "usageSteps": [
+      "Đăng nhập vào tài khoản AI System Creator của bạn",
+      "Nhập từ khóa chính bạn muốn lên top",
+      "Tùy chỉnh giọng văn và độ dài bài viết",
+      "Xem trước và chỉnh sửa nội dung được tạo",
+      "Xuất bản hoặc tải nội dung về máy"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "249.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "1.990.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "4.990.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": false,
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p10",
+    "name": "Sản phẩm AI 10",
+    "tagline": "Tạo banner quảng cáo tự động theo mẫu",
+    "category": "Tool & App",
+    "price": "299.000đ",
+    "rating": "4.7",
+    "image": null,
+    "description": "Sản phẩm AI 10 tạo banner quảng cáo đúng kích thước cho từng nền tảng chỉ từ vài dòng mô tả, tiết kiệm thời gian cho đội ngũ thiết kế.",
+    "features": [
+      "Tạo ảnh độ phân giải cao",
+      "Thư viện mẫu đa dạng theo ngành hàng",
+      "Áp dụng phong cách thương hiệu nhất quán",
+      "Chỉnh sửa hàng loạt cùng lúc",
+      "Xuất nhiều định dạng và kích thước",
+      "Đề xuất bố cục theo nền tảng quảng cáo"
+    ],
+    "usageSteps": [
+      "Chọn mẫu banner theo ngành hàng",
+      "Nhập nội dung và hình ảnh sản phẩm",
+      "Để AI tự động sắp xếp bố cục",
+      "Tinh chỉnh màu sắc và văn bản",
+      "Xuất banner theo từng kích thước cần dùng"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "299.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "2.390.000đ",
+        "note": "Tiết kiệm hơn dùng theo tháng"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "5.990.000đ",
+        "note": "Mua 1 lần, dùng mãi"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 7,
+    "version": "1.0.0",
+    "isNew": true,
+    "guideUrl": "#",
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p11",
+    "name": "Sản phẩm AI 11",
+    "tagline": "Dự báo doanh thu bằng mô hình AI",
+    "category": "Sản phẩm số",
+    "price": "599.000đ",
+    "rating": "4.9",
+    "image": null,
+    "description": "Sản phẩm AI 11 phân tích dữ liệu lịch sử để dự báo doanh thu trong các kỳ tới, giúp doanh nghiệp lập kế hoạch tài chính chủ động hơn.",
+    "features": [
+      "Kết nối trực tiếp với nguồn dữ liệu doanh nghiệp",
+      "Mô hình dự báo cập nhật liên tục",
+      "Cảnh báo bất thường tự động",
+      "Dự báo xu hướng theo nhiều kịch bản",
+      "Xuất báo cáo định kỳ tự động",
+      "Phân quyền xem theo từng phòng ban"
+    ],
+    "usageSteps": [
+      "Kết nối dữ liệu doanh thu lịch sử",
+      "Chọn khoảng thời gian cần dự báo",
+      "Để AI phân tích và đưa ra dự báo",
+      "Xem trực quan hóa trên bảng điều khiển",
+      "Chia sẻ báo cáo với ban lãnh đạo"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "599.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "4.790.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "11.990.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": false,
+    "externalDownloadUrl": ""
+  },
+  {
+    "id": "p12",
+    "name": "Sản phẩm AI 12",
+    "tagline": "Tự động lên lịch và gửi email chiến dịch",
+    "category": "Sản phẩm số",
+    "price": "199.000đ",
+    "rating": "4.6",
+    "image": null,
+    "description": "Sản phẩm AI 12 lên lịch và gửi email chiến dịch tự động theo hành vi khách hàng, giúp bạn duy trì tương tác mà không cần thao tác thủ công.",
+    "features": [
+      "Xây dựng luồng tự động không cần code",
+      "Cá nhân hóa nội dung theo từng khách hàng",
+      "Lên lịch gửi theo thời gian tối ưu",
+      "Phân loại danh sách khách hàng tự động",
+      "Báo cáo hiệu quả chiến dịch chi tiết",
+      "Hoạt động 24/7 không gián đoạn"
+    ],
+    "usageSteps": [
+      "Kết nối danh sách email của bạn",
+      "Thiết lập kịch bản chiến dịch tự động",
+      "Thiết kế mẫu email cần gửi",
+      "Lên lịch và kích hoạt chiến dịch",
+      "Theo dõi và tối ưu dựa trên báo cáo"
+    ],
+    "pricingTiers": [
+      {
+        "label": "1 tháng",
+        "price": "199.000đ"
+      },
+      {
+        "label": "1 năm",
+        "price": "1.590.000đ"
+      },
+      {
+        "label": "Trọn đời",
+        "price": "3.990.000đ"
+      }
+    ],
+    "softwareFile": null,
+    "softwareFileName": null,
+    "softwareFileSize": null,
+    "trialDays": 0,
+    "version": "",
+    "guideUrl": "",
+    "isNew": true,
+    "externalDownloadUrl": ""
+  }
+]
