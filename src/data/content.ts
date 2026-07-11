@@ -68,14 +68,6 @@ export const features = [
   },
 ];
 
-export const downloadTools = [
-  { name: "Tool tải về 01", tagline: "Xử lý tác vụ AI ngay trên máy tính, không cần internet", price: "299.000đ", platform: "Windows / macOS" },
-  { name: "Tool tải về 02", tagline: "Tối ưu hình ảnh và video hàng loạt bằng AI cục bộ", price: "199.000đ", platform: "Windows" },
-  { name: "Tool tải về 03", tagline: "Trích xuất và tóm tắt văn bản từ tài liệu", price: "Miễn phí", platform: "macOS" },
-  { name: "Tool tải về 04", tagline: "Quản lý và tự động hóa tác vụ hằng ngày", price: "249.000đ", platform: "Windows / macOS" },
-  { name: "Tool tải về 05", tagline: "Sao lưu và đồng bộ dữ liệu thông minh", price: "149.000đ", platform: "Windows" },
-];
-
 export const faqs = [
   {
     question: "Tôi cần kỹ năng kỹ thuật gì để bắt đầu?",
