@@ -8,7 +8,7 @@ export const siteConfig = {
     { label: "Trang chủ", href: "/" },
     { label: "Sản phẩm", href: "/san-pham" },
     { label: "Prompt tham khảo", href: "/prompt-tham-khao" },
-    { label: "Bảng giá", href: "/gia" },
+    { label: "Quà Tặng", href: "/qua-tang" },
     { label: "Liên hệ", href: "/lien-he" },
   ],
 };
@@ -151,19 +151,14 @@ export const pricingPlans = [
   },
 ];
 
-export const pricingFaqs = [
+export const giftFaqs = [
   {
-    question: "Tôi có thể đổi gói bất kỳ lúc nào không?",
-    answer: "Có. Bạn có thể nâng cấp hoặc hạ cấp gói dịch vụ bất kỳ lúc nào ngay trong tài khoản.",
+    question: "Các sản phẩm trong mục Quà Tặng có thật sự miễn phí không?",
+    answer: "Có. Toàn bộ sản phẩm hiển thị ở đây được tải về và sử dụng hoàn toàn miễn phí.",
   },
   {
-    question: "Gói Doanh nghiệp có những gì khác biệt?",
-    answer:
-      "Gói Doanh nghiệp được tùy chỉnh theo quy mô và yêu cầu bảo mật riêng của từng doanh nghiệp, kèm quản lý tài khoản chuyên trách.",
-  },
-  {
-    question: "Tôi có được hoàn tiền nếu không hài lòng không?",
-    answer: "Có. Chúng tôi hoàn tiền 100% trong 14 ngày đầu nếu bạn không hài lòng với dịch vụ.",
+    question: "Tôi có cần tạo tài khoản để tải về không?",
+    answer: "Không cần. Bấm \"Tải về miễn phí\" là tải ngay, không yêu cầu đăng ký hay thanh toán.",
   },
 ];
 
@@ -189,7 +184,7 @@ export const footer = {
       links: [
         { label: "Sản phẩm nổi bật", href: "/san-pham" },
         { label: "Tool tải về", href: "/#downloads" },
-        { label: "Bảng giá", href: "/gia" },
+        { label: "Quà Tặng", href: "/qua-tang" },
         { label: "Tích hợp", href: "/#features" },
       ],
     },

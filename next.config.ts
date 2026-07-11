@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // Tab "Bảng giá" (/gia) đã đổi thành "Quà Tặng" (/qua-tang) — giữ redirect
+      // để link cũ đã chia sẻ/lưu trước đây không bị lỗi 404.
+      { source: "/gia", destination: "/qua-tang", permanent: true },
+    ];
+  },
   experimental: {
     serverActions: {
       // Ảnh/tệp phần mềm giờ tải thẳng lên Supabase Storage từ trình duyệt (xem
