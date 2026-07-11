@@ -20,7 +20,7 @@ export default function Hero({ hero }: { hero: SiteContent["hero"] }) {
         <Reveal delay={100}>
           <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             {hero.headline}
-            <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
+            <span className="animate-[shimmer_5s_linear_infinite] bg-gradient-to-r from-accent via-[#fff3cf] to-accent-2 bg-[length:200%_auto] bg-clip-text text-transparent drop-shadow-[0_0_28px_rgba(212,175,55,0.45)] motion-reduce:animate-none">
               {hero.headlineHighlight}
             </span>
             {hero.headlineEnd}
