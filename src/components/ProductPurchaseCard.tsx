@@ -10,9 +10,14 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
   const [selected, setSelected] = useState(Math.max(0, tiers.length - 1));
   const selectedTier = tiers[selected];
   const externalUrl = product.externalDownloadUrl || null;
-  const hasDownload = Boolean(externalUrl || product.softwareFile);
+  const downloadUrl = externalUrl ?? product.softwareFile;
+  const hasDownload = Boolean(downloadUrl);
   const trialDays = product.trialDays > 0 ? product.trialDays : 7;
   const gradient = gradients[product.name.length % gradients.length];
+  const isFreeSelection = (selectedTier?.price ?? product.price)
+    .trim()
+    .toLowerCase()
+    .includes("miễn phí");
 
   const metaLine = [product.version ? `v${product.version}` : null, product.softwareFileSize]
     .filter(Boolean)
@@ -60,10 +65,10 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
 
       {metaLine && <p className="mt-4 text-xs text-muted">{metaLine}</p>}
 
-      {hasDownload && (
+      {!isFreeSelection && hasDownload && (
         <div className="mt-4">
           <a
-            href={externalUrl ?? product.softwareFile!}
+            href={downloadUrl!}
             download={externalUrl ? undefined : (product.softwareFileName ?? undefined)}
             target={externalUrl ? "_blank" : undefined}
             rel={externalUrl ? "noopener noreferrer" : undefined}
@@ -77,11 +82,26 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
       )}
 
       <div className="mt-3">
-        <BuyModal
-          productName={`${product.name}${selectedTier ? ` (${selectedTier.label})` : ""}`}
-          price={selectedTier?.price ?? product.price}
-          triggerClassName="flex w-full items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-        />
+        {isFreeSelection ? (
+          downloadUrl && (
+            <a
+              href={downloadUrl}
+              download={externalUrl ? undefined : (product.softwareFileName ?? undefined)}
+              target={externalUrl ? "_blank" : undefined}
+              rel={externalUrl ? "noopener noreferrer" : undefined}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              <span aria-hidden>⬇</span>
+              Tải về miễn phí
+            </a>
+          )
+        ) : (
+          <BuyModal
+            productName={`${product.name}${selectedTier ? ` (${selectedTier.label})` : ""}`}
+            price={selectedTier?.price ?? product.price}
+            triggerClassName="flex w-full items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          />
+        )}
       </div>
     </div>
   );

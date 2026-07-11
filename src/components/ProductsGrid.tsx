@@ -85,7 +85,12 @@ export default function ProductsGrid({
         </Reveal>
 
         <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {visibleProducts.map((product, i) => (
+          {visibleProducts.map((product, i) => {
+            const isFree = product.price.trim().toLowerCase().includes("miễn phí");
+            const downloadUrl = product.externalDownloadUrl || product.softwareFile;
+            const isExternal = Boolean(product.externalDownloadUrl);
+
+            return (
             <Reveal key={product.id} delay={(i % 4) * 80}>
               <article className="group flex flex-col rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-accent/60">
                 {product.image ? (
@@ -126,15 +131,31 @@ export default function ProductsGrid({
                   </Link>
                 </div>
 
-                <Link
-                  href={`/san-pham/${product.id}`}
-                  className="mt-3 w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
-                >
-                  Mua ngay
-                </Link>
+                {isFree ? (
+                  downloadUrl && (
+                    <a
+                      href={downloadUrl}
+                      download={isExternal ? undefined : (product.softwareFileName ?? undefined)}
+                      target={isExternal ? "_blank" : undefined}
+                      rel={isExternal ? "noopener noreferrer" : undefined}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                    >
+                      <span aria-hidden>⬇</span>
+                      Tải về miễn phí
+                    </a>
+                  )
+                ) : (
+                  <Link
+                    href={`/san-pham/${product.id}`}
+                    className="mt-3 w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                  >
+                    Mua ngay
+                  </Link>
+                )}
               </article>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
 
         {showViewAll && (
