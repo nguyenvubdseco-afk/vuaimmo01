@@ -45,7 +45,12 @@ export default function AdminFileUpload({
     } catch (err) {
       setStatus("error");
       setResultUrl("");
-      setError(err instanceof Error ? err.message : "Tải lên thất bại, thử lại nhé.");
+      const message = err instanceof Error ? err.message : "";
+      setError(
+        message.includes("exceeded the maximum allowed size")
+          ? "Tệp vượt quá 50MB (giới hạn của gói Supabase hiện tại). Với tệp lớn hơn, dùng ô \"Link tải về ngoài\" (Google Drive...) ở trên thay vì tải trực tiếp."
+          : message || "Tải lên thất bại, thử lại nhé.",
+      );
     }
   }
 
