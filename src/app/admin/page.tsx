@@ -168,6 +168,7 @@ export default async function AdminDashboardPage({
               <Link
                 key={t.slug}
                 href={`/admin?tab=${t.slug}`}
+                scroll={false}
                 className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-colors sm:text-sm ${
                   activeTab.slug === t.slug
                     ? "border-accent bg-accent text-white"
