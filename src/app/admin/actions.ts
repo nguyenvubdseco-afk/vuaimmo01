@@ -10,19 +10,25 @@ import {
 import { verifyAdminPassword } from "@/lib/auth-cookie";
 import {
   createProductId,
+  createPromptId,
   createSignedUpload,
   deleteContactSubmission,
+  deletePromptRow,
   deleteProductFile,
   deleteProductImage,
   deleteProductRow,
   getProduct,
+  getPrompt,
   getSiteContent,
   insertProduct,
+  insertPrompt,
   saveSiteContent,
   setAdminPasswordHash,
   updateProductRow,
+  updatePromptRow,
   type PricingTier,
   type Product,
+  type PromptItem,
   type UploadKind,
 } from "@/lib/store";
 import { hashPassword } from "@/lib/password";
@@ -292,4 +298,64 @@ export async function deleteContact(formData: FormData) {
 
   revalidatePath("/admin");
   redirect("/admin");
+}
+
+// ---------------------------------------------------------------------------
+// Prompt tham khảo
+// ---------------------------------------------------------------------------
+
+type PromptFields = Omit<PromptItem, "id">;
+
+function parsePromptFields(formData: FormData): PromptFields {
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const category = String(formData.get("category") ?? "").trim();
+  const tools = parseLines(String(formData.get("tools") ?? ""));
+  const isNew = formData.get("isNew") === "on";
+  const template = String(formData.get("template") ?? "").trim();
+
+  if (!title) throw new Error("Tiêu đề prompt là bắt buộc.");
+  if (!category) throw new Error("Danh mục là bắt buộc.");
+  if (!template) throw new Error("Nội dung template là bắt buộc.");
+
+  return { title, description, category, tools, isNew, template };
+}
+
+function revalidatePromptPages(id?: string) {
+  revalidatePath("/admin");
+  revalidatePath("/prompt-tham-khao");
+  if (id) revalidatePath(`/admin/prompts/${id}`);
+}
+
+export async function createPrompt(formData: FormData) {
+  await requireAuth();
+  const fields = parsePromptFields(formData);
+
+  await insertPrompt({ id: createPromptId(), ...fields });
+
+  revalidatePromptPages();
+  redirect("/admin?tab=prompt-tham-khao");
+}
+
+export async function updatePrompt(id: string, formData: FormData) {
+  await requireAuth();
+  const fields = parsePromptFields(formData);
+
+  const existing = await getPrompt(id);
+  if (!existing) throw new Error("Không tìm thấy prompt.");
+
+  await updatePromptRow(id, fields);
+
+  revalidatePromptPages(id);
+  redirect("/admin?tab=prompt-tham-khao");
+}
+
+export async function deletePrompt(formData: FormData) {
+  await requireAuth();
+  const id = String(formData.get("id") ?? "");
+
+  await deletePromptRow(id);
+
+  revalidatePromptPages();
+  redirect("/admin?tab=prompt-tham-khao");
 }

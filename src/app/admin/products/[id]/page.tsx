@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { productCategories } from "@/data/content";
-import { getProduct } from "@/lib/store";
+import { getProduct, isFreeProduct } from "@/lib/store";
 import { updateProduct } from "@/app/admin/actions";
 import DeleteProductButton from "@/app/admin/DeleteProductButton";
 import AdminFileUpload from "@/app/admin/AdminFileUpload";
+import { PRODUCT_TABS } from "@/app/admin/productTabs";
 
 export default async function EditProductPage({
   params,
@@ -18,9 +19,14 @@ export default async function EditProductPage({
   const categories = productCategories.filter((c) => c !== "Tất cả");
   const updateProductWithId = updateProduct.bind(null, product.id);
 
+  const backTab =
+    PRODUCT_TABS.find((t) => t.category === product.category)?.slug ??
+    (isFreeProduct(product.price) ? "qua-tang" : undefined);
+  const backHref = backTab ? `/admin?tab=${backTab}` : "/admin";
+
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <Link href="/admin" className="text-sm text-muted hover:text-foreground">
+      <Link href={backHref} className="text-sm text-muted hover:text-foreground">
         ← Quay lại
       </Link>
 

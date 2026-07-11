@@ -1,17 +1,50 @@
 import Link from "next/link";
-import { getContactSubmissions, getOrders, getProducts, getSiteContent } from "@/lib/store";
+import {
+  getContactSubmissions,
+  getOrders,
+  getProducts,
+  getPrompts,
+  getSiteContent,
+  isFreeProduct,
+  type Product,
+  type PromptItem,
+} from "@/lib/store";
 import { logout, updateSiteContent } from "@/app/admin/actions";
 import DeleteProductButton from "@/app/admin/DeleteProductButton";
+import DeletePromptButton from "@/app/admin/DeletePromptButton";
 import DeleteContactButton from "@/app/admin/DeleteContactButton";
 import ChangePasswordForm from "@/app/admin/ChangePasswordForm";
+import { PRODUCT_TABS, resolveTab } from "@/app/admin/productTabs";
 
-export default async function AdminDashboardPage() {
-  const [products, site, contacts, orders] = await Promise.all([
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
+  const activeTab = resolveTab(tab);
+
+  const [products, site, contacts, orders, prompts] = await Promise.all([
     getProducts(),
     getSiteContent(),
     getContactSubmissions(),
     getOrders(),
+    getPrompts(),
   ]);
+
+  const tabProducts =
+    activeTab.kind === "category"
+      ? products.filter((p) => p.category === activeTab.category)
+      : activeTab.kind === "free"
+        ? products.filter((p) => isFreeProduct(p.price))
+        : [];
+
+  const addProductHref =
+    activeTab.kind === "category"
+      ? `/admin/products/new?category=${encodeURIComponent(activeTab.category ?? "")}`
+      : activeTab.kind === "free"
+        ? "/admin/products/new?price=Miễn phí"
+        : "/admin/products/new";
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">
@@ -98,60 +131,60 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section className="mt-10 rounded-2xl border border-border bg-surface p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold">Sản phẩm ({products.length})</h2>
-            <p className="mt-1 text-sm text-muted">Thêm, sửa ảnh hoặc xoá sản phẩm.</p>
+            <p className="mt-1 text-sm text-muted">
+              Quản lý theo từng module — chọn tab rồi thêm, sửa hoặc xoá.
+            </p>
           </div>
-          <Link
-            href="/admin/products/new"
-            className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-2"
-          >
-            + Thêm sản phẩm
-          </Link>
+          {activeTab.kind === "prompts" ? (
+            <Link
+              href="/admin/prompts/new"
+              className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-2"
+            >
+              + Thêm prompt
+            </Link>
+          ) : (
+            <Link
+              href={addProductHref}
+              className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-2"
+            >
+              + Thêm sản phẩm
+            </Link>
+          )}
         </div>
 
-        <div className="mt-6 flex flex-col gap-3">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="flex flex-col gap-3 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div className="flex items-center gap-4">
-                {product.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="h-14 w-14 shrink-0 rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-2 text-sm font-bold text-white/90">
-                    {product.name.slice(-2)}
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm font-semibold">{product.name}</p>
-                  <p className="text-xs text-muted">
-                    {product.category} · {product.price} · ★ {product.rating}
-                  </p>
-                </div>
-              </div>
+        <div className="mt-5 flex flex-wrap gap-2 border-b border-border pb-5">
+          {PRODUCT_TABS.map((t) => {
+            const count =
+              t.kind === "category"
+                ? products.filter((p) => p.category === t.category).length
+                : t.kind === "free"
+                  ? products.filter((p) => isFreeProduct(p.price)).length
+                  : prompts.length;
 
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/admin/products/${product.id}`}
-                  className="rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-2"
-                >
-                  Sửa
-                </Link>
-                <DeleteProductButton productId={product.id} productName={product.name} />
-              </div>
-            </div>
-          ))}
+            return (
+              <Link
+                key={t.slug}
+                href={`/admin?tab=${t.slug}`}
+                className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-colors sm:text-sm ${
+                  activeTab.slug === t.slug
+                    ? "border-accent bg-accent text-white"
+                    : "border-border bg-background text-muted hover:text-foreground"
+                }`}
+              >
+                {t.label} ({count})
+              </Link>
+            );
+          })}
+        </div>
 
-          {products.length === 0 && (
-            <p className="py-6 text-center text-sm text-muted">Chưa có sản phẩm nào.</p>
+        <div className="mt-6">
+          {activeTab.kind === "prompts" ? (
+            <PromptList prompts={prompts} />
+          ) : (
+            <ProductList products={tabProducts} />
           )}
         </div>
       </section>
@@ -275,5 +308,95 @@ function TextAreaField({
         className="resize-none rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent"
       />
     </label>
+  );
+}
+
+function ProductList({ products }: { products: Product[] }) {
+  if (products.length === 0) {
+    return <p className="py-6 text-center text-sm text-muted">Chưa có sản phẩm nào trong mục này.</p>;
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {products.map((product) => (
+        <div
+          key={product.id}
+          className="flex flex-col gap-3 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="flex items-center gap-4">
+            {product.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={product.image}
+                alt={product.name}
+                className="h-14 w-14 shrink-0 rounded-lg object-cover"
+              />
+            ) : (
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-2 text-sm font-bold text-white/90">
+                {product.name.slice(-2)}
+              </div>
+            )}
+            <div>
+              <p className="text-sm font-semibold">{product.name}</p>
+              <p className="text-xs text-muted">
+                {product.category} · {product.price} · ★ {product.rating}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/admin/products/${product.id}`}
+              className="rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-2"
+            >
+              Sửa
+            </Link>
+            <DeleteProductButton productId={product.id} productName={product.name} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PromptList({ prompts }: { prompts: PromptItem[] }) {
+  if (prompts.length === 0) {
+    return <p className="py-6 text-center text-sm text-muted">Chưa có prompt nào.</p>;
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {prompts.map((prompt) => (
+        <div
+          key={prompt.id}
+          className="flex flex-col gap-3 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <p className="text-sm font-semibold">
+              {prompt.title}
+              {prompt.isNew && (
+                <span className="ml-2 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-white">
+                  Mới
+                </span>
+              )}
+            </p>
+            <p className="text-xs text-muted">
+              {prompt.category}
+              {prompt.tools.length > 0 ? ` · ${prompt.tools.join(", ")}` : ""}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/admin/prompts/${prompt.id}`}
+              className="rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent-2"
+            >
+              Sửa
+            </Link>
+            <DeletePromptButton promptId={prompt.id} promptTitle={prompt.title} />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

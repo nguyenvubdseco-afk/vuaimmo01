@@ -30,6 +30,16 @@ export type Product = {
   guideUrl: string;
 };
 
+export type PromptItem = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  tools: string[];
+  isNew: boolean;
+  template: string;
+};
+
 export type ContactSubmission = {
   id: string;
   name: string;
@@ -216,6 +226,88 @@ export async function deleteProductRow(id: string): Promise<void> {
 }
 
 export function createProductId(): string {
+  return randomUUID();
+}
+
+/** Sản phẩm hiển thị ở trang "Quà Tặng" — bất kỳ sản phẩm nào đang để giá "Miễn phí". */
+export function isFreeProduct(price: string): boolean {
+  return price.trim().toLowerCase().includes("miễn phí");
+}
+
+// ---------------------------------------------------------------------------
+// Thư viện Prompt tham khảo
+// ---------------------------------------------------------------------------
+
+type PromptRow = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  tools: string[];
+  is_new: boolean;
+  template: string;
+};
+
+function rowToPrompt(row: PromptRow): PromptItem {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    category: row.category,
+    tools: row.tools ?? [],
+    isNew: row.is_new,
+    template: row.template,
+  };
+}
+
+function promptToRow(prompt: PromptItem): PromptRow {
+  return {
+    id: prompt.id,
+    title: prompt.title,
+    description: prompt.description,
+    category: prompt.category,
+    tools: prompt.tools,
+    is_new: prompt.isNew,
+    template: prompt.template,
+  };
+}
+
+export async function getPrompts(): Promise<PromptItem[]> {
+  const { data, error } = await supabase()
+    .from("prompts")
+    .select("*")
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data as PromptRow[]).map(rowToPrompt);
+}
+
+export async function getPrompt(id: string): Promise<PromptItem | null> {
+  const { data, error } = await supabase()
+    .from("prompts")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? rowToPrompt(data as PromptRow) : null;
+}
+
+export async function insertPrompt(prompt: PromptItem): Promise<void> {
+  const { error } = await supabase().from("prompts").insert(promptToRow(prompt));
+  if (error) throw error;
+}
+
+export async function updatePromptRow(id: string, fields: Omit<PromptItem, "id">): Promise<void> {
+  const row = promptToRow({ id, ...fields });
+  const { error } = await supabase().from("prompts").update(row).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deletePromptRow(id: string): Promise<void> {
+  const { error } = await supabase().from("prompts").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export function createPromptId(): string {
   return randomUUID();
 }
 

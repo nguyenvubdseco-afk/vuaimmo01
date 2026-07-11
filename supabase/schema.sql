@@ -61,6 +61,19 @@ create table if not exists admin_settings (
   constraint admin_settings_singleton check (id = 1)
 );
 
+-- Thư viện Prompt tham khảo (tab riêng trong /admin, tách khỏi bảng products vì
+-- không có giá/ảnh/file tải về — chỉ có nội dung template để copy).
+create table if not exists prompts (
+  id text primary key,
+  title text not null default '',
+  description text not null default '',
+  category text not null default '',
+  tools jsonb not null default '[]',
+  is_new boolean not null default false,
+  template text not null default '',
+  created_at timestamptz not null default now()
+);
+
 -- Bật Row Level Security và KHÔNG thêm policy nào — chặn hoàn toàn truy cập qua
 -- anon/public key. Server luôn dùng service role key (bỏ qua RLS) nên vẫn hoạt động bình thường.
 alter table products enable row level security;
@@ -68,6 +81,7 @@ alter table site_content enable row level security;
 alter table contacts enable row level security;
 alter table orders enable row level security;
 alter table admin_settings enable row level security;
+alter table prompts enable row level security;
 
 -- Dòng nội dung mặc định cho site_content nếu bảng đang trống (server sẽ ghi đè giá trị
 -- thật qua trang /admin, đây chỉ là để tránh lỗi "không tìm thấy dòng" trong lần chạy đầu).

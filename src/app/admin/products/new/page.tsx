@@ -2,13 +2,26 @@ import Link from "next/link";
 import { productCategories } from "@/data/content";
 import { createProduct } from "@/app/admin/actions";
 import AdminFileUpload from "@/app/admin/AdminFileUpload";
+import { PRODUCT_TABS } from "@/app/admin/productTabs";
 
-export default function NewProductPage() {
+export default async function NewProductPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; price?: string }>;
+}) {
+  const { category: initialCategory, price: initialPrice } = await searchParams;
   const categories = productCategories.filter((c) => c !== "Tất cả");
+
+  const backTab = initialCategory
+    ? PRODUCT_TABS.find((t) => t.category === initialCategory)?.slug
+    : initialPrice
+      ? "qua-tang"
+      : undefined;
+  const backHref = backTab ? `/admin?tab=${backTab}` : "/admin";
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      <Link href="/admin" className="text-sm text-muted hover:text-foreground">
+      <Link href={backHref} className="text-sm text-muted hover:text-foreground">
         ← Quay lại
       </Link>
 
@@ -44,6 +57,7 @@ export default function NewProductPage() {
             name="category"
             list="category-options"
             required
+            defaultValue={initialCategory}
             className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-accent"
           />
           <datalist id="category-options">
@@ -60,6 +74,7 @@ export default function NewProductPage() {
               type="text"
               name="price"
               placeholder="Miễn phí / 299.000đ"
+              defaultValue={initialPrice}
               className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-accent"
             />
           </label>
