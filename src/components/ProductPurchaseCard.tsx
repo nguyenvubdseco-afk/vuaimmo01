@@ -42,24 +42,31 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
 
       {tiers.length > 0 && (
         <div className="mt-5 flex flex-col gap-2">
-          {tiers.map((tier, i) => (
-            <button
-              key={tier.label}
-              type="button"
-              onClick={() => setSelected(i)}
-              className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors ${
-                selected === i
-                  ? "border-accent bg-accent/10"
-                  : "border-border hover:border-accent/40"
-              }`}
-            >
-              <span>
-                <span className="block text-sm font-semibold">{tier.label}</span>
-                {tier.note && <span className="block text-xs text-muted">{tier.note}</span>}
-              </span>
-              <span className="text-base font-bold">{tier.price}</span>
-            </button>
-          ))}
+          {tiers.map((tier, i) => {
+            const tierIsFree = tier.price.trim().toLowerCase().includes("miễn phí");
+            return (
+              <button
+                key={tier.label}
+                type="button"
+                onClick={() => setSelected(i)}
+                className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors ${
+                  selected === i
+                    ? "border-accent bg-accent/10"
+                    : "border-border hover:border-accent/40"
+                }`}
+              >
+                <span>
+                  <span className="block text-sm font-semibold">{tier.label}</span>
+                  {tier.note && <span className="block text-xs text-muted">{tier.note}</span>}
+                </span>
+                <span
+                  className={`text-base font-bold ${tierIsFree ? "text-orange-600" : "text-red-600"}`}
+                >
+                  {tier.price}
+                </span>
+              </button>
+            );
+          })}
         </div>
       )}
 

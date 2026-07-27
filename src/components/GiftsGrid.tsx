@@ -46,7 +46,7 @@ export default function GiftsGrid({ products }: { products: Product[] }) {
 
                   <div className="mt-4 flex items-start justify-between gap-2">
                     <h3 className="text-sm font-semibold">{product.name}</h3>
-                    <span className="shrink-0 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-400">
+                    <span className="shrink-0 rounded-full bg-orange-500/10 px-2 py-0.5 text-[11px] font-medium text-orange-600">
                       Miễn phí
                     </span>
                   </div>

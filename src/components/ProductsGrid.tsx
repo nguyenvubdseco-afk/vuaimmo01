@@ -120,7 +120,9 @@ export default function ProductsGrid({
                 <p className="mt-1 text-xs text-muted">{product.tagline}</p>
 
                 <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
-                  <span className="text-xs font-semibold text-accent-2">
+                  <span
+                    className={`text-xs font-semibold ${isFree ? "text-orange-600" : "text-red-600"}`}
+                  >
                     {product.price}
                   </span>
                   <Link

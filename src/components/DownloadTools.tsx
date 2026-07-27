@@ -53,7 +53,7 @@ export default function DownloadTools({ products }: { products: Product[] }) {
                   <p className="mt-4 text-sm text-muted">{product.tagline}</p>
 
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
-                    <span className="text-sm font-semibold text-accent-2">Miễn phí</span>
+                    <span className="text-sm font-semibold text-orange-600">Miễn phí</span>
                     {downloadUrl ? (
                       <a
                         href={downloadUrl}
