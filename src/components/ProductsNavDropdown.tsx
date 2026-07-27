@@ -28,7 +28,7 @@ export default function ProductsNavDropdown() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex items-center gap-1 text-sm text-muted transition-colors hover:text-foreground"
+        className="flex items-center gap-1 text-sm text-white/80 transition-colors hover:text-white"
       >
         Sản phẩm
         <svg

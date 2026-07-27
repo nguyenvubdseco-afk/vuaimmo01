@@ -9,7 +9,7 @@ export default async function Navbar() {
   const authenticated = await isAdminAuthenticated();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-gradient-to-r from-accent to-accent-2 shadow-[0_8px_24px_-8px_rgba(37,99,235,0.45)]">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
@@ -20,7 +20,7 @@ export default async function Navbar() {
             className="h-10 w-10 rounded-lg object-cover"
             priority
           />
-          <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-[11.7px] font-semibold tracking-tight text-transparent">
+          <span className="text-[11.7px] font-semibold tracking-tight text-white">
             {siteConfig.brand}
           </span>
         </Link>
@@ -33,7 +33,7 @@ export default async function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm text-muted transition-colors hover:text-foreground"
+                className="text-sm text-white/80 transition-colors hover:text-white"
               >
                 {item.label}
               </Link>
@@ -46,9 +46,9 @@ export default async function Navbar() {
             <>
               <Link
                 href="/admin"
-                className="flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent-2"
+                className="flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-white hover:bg-white/10"
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-xs font-bold text-white">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-xs font-bold text-accent">
                   A
                 </span>
                 Quản trị viên
@@ -56,7 +56,7 @@ export default async function Navbar() {
               <form action={logout}>
                 <button
                   type="submit"
-                  className="rounded-full border border-border px-4 py-2 text-sm font-medium text-muted transition-colors hover:text-foreground"
+                  className="rounded-full border border-white/30 px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:border-white hover:text-white"
                 >
                   Đăng xuất
                 </button>
@@ -65,7 +65,7 @@ export default async function Navbar() {
           ) : (
             <Link
               href="/admin/login"
-              className="rounded-full border border-border px-5 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent-2"
+              className="rounded-full border border-white/30 px-5 py-2 text-sm font-medium text-white transition-colors hover:border-white hover:bg-white/10"
             >
               Đăng nhập
             </Link>
