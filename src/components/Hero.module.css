@@ -68,58 +68,6 @@
   border-left: 18px solid var(--accent);
 }
 
-.badge {
-  position: absolute;
-  display: none;
-  align-items: center;
-  gap: 10px;
-  border-radius: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: 0 12px 28px -12px rgba(15, 23, 42, 0.25);
-  padding: 10px 16px 10px 10px;
-  white-space: nowrap;
-}
-
-.badgeIcon {
-  display: flex;
-  height: 32px;
-  width: 32px;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: var(--surface-2);
-  font-size: 16px;
-}
-
-.badgeLabel {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--foreground);
-}
-
-.badgeTopRight {
-  top: -18px;
-  right: 24px;
-}
-
-.badgeRight {
-  top: 42%;
-  right: -28px;
-}
-
-.badgeBottomLeft {
-  bottom: 36px;
-  left: -24px;
-}
-
-.badgeBottomRight {
-  bottom: -18px;
-  right: 32px;
-}
-
 /* ---------------------------------------------------------------------- */
 /* Content column                                                          */
 /* ---------------------------------------------------------------------- */
@@ -227,12 +175,6 @@
 /* Responsive                                                              */
 /* ---------------------------------------------------------------------- */
 
-@media (min-width: 641px) {
-  .badge {
-    display: flex;
-  }
-}
-
 @media (max-width: 960px) {
   .grid {
     grid-template-columns: 1fr;
@@ -265,14 +207,5 @@
 
   .title {
     font-size: 32px;
-  }
-
-  .badgeTopRight,
-  .badgeBottomRight {
-    right: 8px;
-  }
-
-  .badgeBottomLeft {
-    left: 8px;
   }
 }

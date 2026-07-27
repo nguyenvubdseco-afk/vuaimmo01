@@ -24,13 +24,6 @@ function getVideoEmbed(url: string): VideoEmbed | null {
   return { kind: "video", src: trimmed };
 }
 
-const BADGES = [
-  { icon: "🧩", label: "Tool & App", className: styles.badgeTopRight },
-  { icon: "💬", label: "Chatbot & Prompt", className: styles.badgeRight },
-  { icon: "📦", label: "Sản phẩm số", className: styles.badgeBottomLeft },
-  { icon: "✨", label: "Prompt tham khảo", className: styles.badgeBottomRight },
-];
-
 export default function Hero({ hero }: { hero: SiteContent["hero"] }) {
   const embed = getVideoEmbed(hero.videoUrl ?? "");
 
@@ -58,15 +51,6 @@ export default function Hero({ hero }: { hero: SiteContent["hero"] }) {
               </div>
             )}
           </div>
-
-          {BADGES.map((badge) => (
-            <div key={badge.label} className={`${styles.badge} ${badge.className}`}>
-              <span className={styles.badgeIcon} aria-hidden>
-                {badge.icon}
-              </span>
-              <span className={styles.badgeLabel}>{badge.label}</span>
-            </div>
-          ))}
         </Reveal>
 
         <div className={styles.content}>
