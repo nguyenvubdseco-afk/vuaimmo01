@@ -35,11 +35,11 @@ export default function DownloadTools({ products }: { products: Product[] }) {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="h-12 w-12 shrink-0 rounded-xl object-cover"
+                        className="h-12 w-12 shrink-0 rounded-xl object-cover transition hover:-translate-y-1 hover:shadow-lg"
                       />
                     ) : (
                       <span
-                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${gradients[(i + 4) % gradients.length]} text-sm font-bold text-white`}
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${gradients[(i + 4) % gradients.length]} text-sm font-bold text-white transition hover:-translate-y-1 hover:shadow-lg`}
                       >
                         {product.name.slice(-2)}
                       </span>

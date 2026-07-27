@@ -30,11 +30,11 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
         <img
           src={product.image}
           alt={product.name}
-          className="aspect-[9/16] w-full rounded-xl object-cover"
+          className="aspect-[9/16] w-full rounded-xl object-cover transition hover:-translate-y-1 hover:shadow-lg"
         />
       ) : (
         <div
-          className={`flex aspect-[9/16] w-full items-center justify-center rounded-xl bg-gradient-to-br ${gradient}`}
+          className={`flex aspect-[9/16] w-full items-center justify-center rounded-xl bg-gradient-to-br ${gradient} transition hover:-translate-y-1 hover:shadow-lg`}
         >
           <span className="text-4xl font-bold text-white/90">{product.name.slice(-2)}</span>
         </div>
