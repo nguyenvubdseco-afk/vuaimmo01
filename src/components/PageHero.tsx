@@ -9,10 +9,6 @@ type PageHeroProps = {
 export default function PageHero({ eyebrow, title, description }: PageHeroProps) {
   return (
     <section className="relative overflow-hidden px-6 pb-16 pt-16 sm:pt-24">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-[360px] w-[720px] -translate-x-1/2 rounded-full bg-accent/20 blur-[120px]"
-      />
       <Reveal className="relative mx-auto max-w-2xl text-center">
         <span className="inline-flex items-center rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-muted">
           {eyebrow}

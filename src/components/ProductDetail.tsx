@@ -7,11 +7,6 @@ export default function ProductDetail({ product }: { product: Product }) {
   return (
     <>
       <section className="relative overflow-hidden px-6 pb-10 pt-8 sm:pt-12">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-[360px] w-[720px] -translate-x-1/2 rounded-full bg-accent/20 blur-[120px]"
-        />
-
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
           <div>
             <Reveal>

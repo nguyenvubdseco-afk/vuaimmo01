@@ -5,11 +5,6 @@ import Reveal from "@/components/Reveal";
 export default function Hero({ hero }: { hero: SiteContent["hero"] }) {
   return (
     <section id="top" className="relative overflow-hidden px-6 pb-20 pt-20 sm:pt-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-[480px] w-[900px] -translate-x-1/2 rounded-full bg-accent/20 blur-[120px]"
-      />
-
       <div className="relative mx-auto max-w-3xl text-center">
         <Reveal>
           <span className="inline-flex items-center rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-muted">
@@ -20,7 +15,7 @@ export default function Hero({ hero }: { hero: SiteContent["hero"] }) {
         <Reveal delay={100}>
           <h1 className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             {hero.headline}
-            <span className="animate-[shimmer_5s_linear_infinite] bg-gradient-to-r from-accent via-[#fff3cf] to-accent-2 bg-[length:200%_auto] bg-clip-text text-transparent drop-shadow-[0_0_28px_rgba(212,175,55,0.45)] motion-reduce:animate-none">
+            <span className="animate-[shimmer_5s_linear_infinite] bg-gradient-to-r from-accent via-[#93c5fd] to-accent-2 bg-[length:200%_auto] bg-clip-text text-transparent drop-shadow-[0_0_28px_rgba(37,99,235,0.35)] motion-reduce:animate-none">
               {hero.headlineHighlight}
             </span>
             {hero.headlineEnd}
