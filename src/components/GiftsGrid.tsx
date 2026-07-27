@@ -32,11 +32,11 @@ export default function GiftsGrid({ products }: { products: Product[] }) {
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="h-28 w-full rounded-xl object-cover"
+                      className="aspect-[9/16] w-full rounded-xl object-cover"
                     />
                   ) : (
                     <div
-                      className={`flex h-28 items-center justify-center rounded-xl bg-gradient-to-br ${gradients[i % gradients.length]}`}
+                      className={`flex aspect-[9/16] w-full items-center justify-center rounded-xl bg-gradient-to-br ${gradients[i % gradients.length]}`}
                     >
                       <span className="text-3xl font-bold text-white/90">
                         {product.name.slice(-2)}
