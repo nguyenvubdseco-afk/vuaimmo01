@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { productCategories } from "@/data/content";
-import { getProduct, isFreeProduct } from "@/lib/store";
+import { getProduct, isExternalImageUrl, isFreeProduct } from "@/lib/store";
 import { updateProduct } from "@/app/admin/actions";
 import DeleteProductButton from "@/app/admin/DeleteProductButton";
 import AdminFileUpload from "@/app/admin/AdminFileUpload";
@@ -23,6 +23,7 @@ export default async function EditProductPage({
     PRODUCT_TABS.find((t) => t.category === product.category)?.slug ??
     (isFreeProduct(product.price) ? "qua-tang" : undefined);
   const backHref = backTab ? `/admin?tab=${backTab}` : "/admin";
+  const currentImageUrl = isExternalImageUrl(product.image) ? (product.image ?? "") : "";
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
@@ -128,6 +129,20 @@ export default async function EditProductPage({
           />
           <span className="text-xs text-muted">Tối đa 5MB.</span>
         </div>
+
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="font-medium">Hoặc dán link ảnh đã public (tuỳ chọn)</span>
+          <input
+            type="text"
+            name="imageUrl"
+            defaultValue={currentImageUrl}
+            placeholder="https://..."
+            className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-accent"
+          />
+          <span className="text-xs text-muted">
+            Nếu điền, link này sẽ được ưu tiên dùng thay vì ảnh tải lên ở trên.
+          </span>
+        </label>
 
         <div className="border-t border-border pt-4">
           <h2 className="text-sm font-semibold text-accent-2">Trang chi tiết sản phẩm</h2>

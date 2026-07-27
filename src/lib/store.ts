@@ -553,6 +553,11 @@ export async function createSignedUpload(
   return { bucket, path: filename, token: data.token, publicUrl: publicData.publicUrl };
 }
 
+/** true nếu ảnh là link ngoài do admin dán vào (không phải ảnh tải lên Supabase Storage). */
+export function isExternalImageUrl(imagePath: string | null): boolean {
+  return Boolean(imagePath) && !isManagedStorageUrl(imagePath, PRODUCT_IMAGES_BUCKET);
+}
+
 /** Xoá ảnh sản phẩm cũ trên Supabase Storage (bỏ qua nếu không thuộc bucket quản lý — vd. ảnh seed thủ công). */
 export async function deleteProductImage(imagePath: string | null): Promise<void> {
   if (!isManagedStorageUrl(imagePath, PRODUCT_IMAGES_BUCKET)) return;

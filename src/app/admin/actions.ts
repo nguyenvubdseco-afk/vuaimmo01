@@ -160,13 +160,22 @@ function parseProductFields(formData: FormData): ProductFields {
   };
 }
 
+/**
+ * Ảnh có thể tới từ 2 nguồn: tệp đã tải thẳng lên Supabase Storage (xem AdminFileUpload,
+ * gửi qua field "image"), hoặc link ảnh công khai admin tự dán vào (field "imageUrl").
+ * Ưu tiên link dán tay nếu có điền.
+ */
+function resolveImageInput(formData: FormData): string {
+  const uploaded = String(formData.get("image") ?? "").trim();
+  const pastedUrl = String(formData.get("imageUrl") ?? "").trim();
+  return pastedUrl || uploaded;
+}
+
 export async function createProduct(formData: FormData) {
   await requireAuth();
   const fields = parseProductFields(formData);
 
-  // Ảnh/tệp phần mềm đã được trình duyệt tải thẳng lên Supabase Storage trước khi submit
-  // form này (xem AdminFileUpload) — ở đây chỉ nhận lại URL kết quả (chuỗi text nhỏ).
-  const image = String(formData.get("image") ?? "").trim() || null;
+  const image = resolveImageInput(formData) || null;
   const softwareFile = String(formData.get("softwareFile") ?? "").trim() || null;
   const softwareFileName = softwareFile
     ? String(formData.get("softwareFileOriginalName") ?? "").trim() || null
@@ -198,7 +207,7 @@ export async function updateProduct(id: string, formData: FormData) {
   if (!existing) throw new Error("Không tìm thấy sản phẩm.");
 
   let image = existing.image;
-  const newImage = String(formData.get("image") ?? "").trim();
+  const newImage = resolveImageInput(formData);
   const removeImage = formData.get("removeImage") === "on";
 
   if (newImage) {

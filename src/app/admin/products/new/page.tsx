@@ -102,6 +102,19 @@ export default async function NewProductPage({
           </span>
         </div>
 
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="font-medium">Hoặc dán link ảnh đã public (tuỳ chọn)</span>
+          <input
+            type="text"
+            name="imageUrl"
+            placeholder="https://..."
+            className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-accent"
+          />
+          <span className="text-xs text-muted">
+            Nếu điền, link này sẽ được ưu tiên dùng thay vì ảnh tải lên ở trên.
+          </span>
+        </label>
+
         <div className="border-t border-border pt-4">
           <h2 className="text-sm font-semibold text-accent-2">Trang chi tiết sản phẩm</h2>
           <p className="mt-1 text-xs text-muted">
