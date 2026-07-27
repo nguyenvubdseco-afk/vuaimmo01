@@ -59,7 +59,7 @@ export default function GiftsGrid({ products }: { products: Product[] }) {
                       download={isExternal ? undefined : (product.softwareFileName ?? undefined)}
                       target={isExternal ? "_blank" : undefined}
                       rel={isExternal ? "noopener noreferrer" : undefined}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30"
                     >
                       <span aria-hidden>⬇</span>
                       Tải về miễn phí
@@ -67,7 +67,7 @@ export default function GiftsGrid({ products }: { products: Product[] }) {
                   ) : (
                     <Link
                       href={`/san-pham/${product.id}`}
-                      className="mt-4 flex w-full items-center justify-center rounded-full border border-border px-4 py-2 text-center text-xs font-medium text-foreground transition-colors group-hover:border-accent group-hover:text-accent-2"
+                      className="mt-4 flex w-full items-center justify-center rounded-full border border-border px-4 py-2 text-center text-xs font-medium text-foreground transition hover:-translate-y-0.5 hover:border-accent hover:text-accent-2 group-hover:border-accent group-hover:text-accent-2"
                     >
                       Xem chi tiết
                     </Link>

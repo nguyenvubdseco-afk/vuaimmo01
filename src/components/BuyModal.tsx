@@ -19,7 +19,7 @@ export default function BuyModal({
   productName,
   price,
   triggerLabel = "Mua ngay",
-  triggerClassName = "w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90",
+  triggerClassName = "w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30",
   downloadUrl,
   downloadFileName,
 }: BuyModalProps) {
@@ -145,7 +145,7 @@ export default function BuyModal({
                     type="button"
                     disabled={!email || isCreating}
                     onClick={handleCreateOrder}
-                    className="mt-5 w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="mt-5 w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     {isCreating ? "Đang tạo mã QR..." : "Tạo mã QR thanh toán"}
                   </button>

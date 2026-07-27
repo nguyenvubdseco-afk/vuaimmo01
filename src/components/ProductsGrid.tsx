@@ -125,7 +125,7 @@ export default function ProductsGrid({
                   </span>
                   <Link
                     href={`/san-pham/${product.id}`}
-                    className="rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground transition-colors group-hover:border-accent group-hover:text-accent-2"
+                    className="rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground transition hover:-translate-y-0.5 hover:border-accent hover:text-accent-2 group-hover:border-accent group-hover:text-accent-2"
                   >
                     Xem chi tiết
                   </Link>
@@ -138,7 +138,7 @@ export default function ProductsGrid({
                       download={isExternal ? undefined : (product.softwareFileName ?? undefined)}
                       target={isExternal ? "_blank" : undefined}
                       rel={isExternal ? "noopener noreferrer" : undefined}
-                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30"
                     >
                       <span aria-hidden>⬇</span>
                       Tải về miễn phí
@@ -147,7 +147,7 @@ export default function ProductsGrid({
                 ) : (
                   <Link
                     href={`/san-pham/${product.id}`}
-                    className="mt-3 w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                    className="mt-3 w-full rounded-full bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-center text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30"
                   >
                     Mua ngay
                   </Link>

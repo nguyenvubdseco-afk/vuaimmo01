@@ -72,7 +72,7 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
             download={externalUrl ? undefined : (product.softwareFileName ?? undefined)}
             target={externalUrl ? "_blank" : undefined}
             rel={externalUrl ? "noopener noreferrer" : undefined}
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-accent px-6 py-3 text-sm font-semibold text-accent-2 transition-colors hover:bg-accent/10"
+            className="flex w-full items-center justify-center gap-2 rounded-full border border-accent px-6 py-3 text-sm font-semibold text-accent-2 transition hover:-translate-y-0.5 hover:bg-accent/10"
           >
             <span aria-hidden>⬇</span>
             Tải về và dùng thử {trialDays} ngày
@@ -89,7 +89,7 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
               download={externalUrl ? undefined : (product.softwareFileName ?? undefined)}
               target={externalUrl ? "_blank" : undefined}
               rel={externalUrl ? "noopener noreferrer" : undefined}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30"
             >
               <span aria-hidden>⬇</span>
               Tải về miễn phí
@@ -99,7 +99,7 @@ export default function ProductPurchaseCard({ product }: { product: Product }) {
           <BuyModal
             productName={`${product.name}${selectedTier ? ` (${selectedTier.label})` : ""}`}
             price={selectedTier?.price ?? product.price}
-            triggerClassName="flex w-full items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            triggerClassName="flex w-full items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30"
           />
         )}
       </div>

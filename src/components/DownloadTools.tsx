@@ -60,14 +60,14 @@ export default function DownloadTools({ products }: { products: Product[] }) {
                         download={isExternal ? undefined : (product.softwareFileName ?? undefined)}
                         target={isExternal ? "_blank" : undefined}
                         rel={isExternal ? "noopener noreferrer" : undefined}
-                        className="rounded-full bg-foreground px-4 py-1.5 text-xs font-semibold text-background transition-opacity hover:opacity-90"
+                        className="rounded-full bg-foreground px-4 py-1.5 text-xs font-semibold text-background transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20"
                       >
                         Tải về
                       </a>
                     ) : (
                       <Link
                         href={`/san-pham/${product.id}`}
-                        className="rounded-full bg-foreground px-4 py-1.5 text-xs font-semibold text-background transition-opacity hover:opacity-90"
+                        className="rounded-full bg-foreground px-4 py-1.5 text-xs font-semibold text-background transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20"
                       >
                         Xem chi tiết
                       </Link>
