@@ -86,6 +86,13 @@ export default async function AdminDashboardPage({
               name="hero_description"
               defaultValue={site.hero.description}
             />
+            <div className="mt-4">
+              <Field
+                label="Link video Hero (YouTube/Vimeo hoặc URL .mp4 — để trống sẽ hiện khung chờ)"
+                name="hero_videoUrl"
+                defaultValue={site.hero.videoUrl}
+              />
+            </div>
           </div>
 
           <div className="border-t border-border pt-6">

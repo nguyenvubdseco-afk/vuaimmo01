@@ -72,6 +72,8 @@ export type SiteContent = {
     description: string;
     primaryCta: string;
     secondaryCta: string;
+    /** Link YouTube/Vimeo hoặc URL file .mp4 trực tiếp — để trống sẽ hiện khung chờ video. */
+    videoUrl: string;
   };
   contact: {
     eyebrow: string;

@@ -269,6 +269,7 @@ export async function updateSiteContent(formData: FormData) {
     description: String(formData.get("hero_description") ?? ""),
     primaryCta: String(formData.get("hero_primaryCta") ?? ""),
     secondaryCta: String(formData.get("hero_secondaryCta") ?? ""),
+    videoUrl: String(formData.get("hero_videoUrl") ?? "").trim(),
   };
 
   content.contact = {
