@@ -1,8 +1,8 @@
 .hero {
   position: relative;
   overflow: hidden;
-  min-height: 850px;
-  padding: 160px 36px;
+  min-height: 620px;
+  padding: 110px 36px 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,12 +105,12 @@
 }
 
 .title {
-  margin-top: 28px;
+  margin-top: 20px;
   width: 100%;
-  max-width: 640px;
+  max-width: 560px;
   min-width: 0;
-  font-size: 82px;
-  line-height: 1.03;
+  font-size: 56px;
+  line-height: 1.08;
   letter-spacing: -0.03em;
   font-weight: 600;
   color: var(--foreground);
@@ -125,11 +125,11 @@
 }
 
 .subtitle {
-  margin-top: 20px;
+  margin-top: 14px;
   width: 100%;
-  max-width: 480px;
+  max-width: 460px;
   min-width: 0;
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.45;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -141,7 +141,7 @@
 /* ---------------------------------------------------------------------- */
 
 .tickerWrap {
-  margin-top: 32px;
+  margin-top: 22px;
   width: 100%;
   max-width: 520px;
   min-width: 0;
@@ -191,7 +191,7 @@
 /* ---------------------------------------------------------------------- */
 
 .ctaRow {
-  margin-top: 32px;
+  margin-top: 22px;
   width: 100%;
   min-width: 0;
   display: flex;
@@ -289,14 +289,14 @@
 /* ---------------------------------------------------------------------- */
 
 .statsRow {
-  margin-top: 56px;
+  margin-top: 32px;
   width: 100%;
   max-width: 520px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   border-top: 1px solid var(--border);
-  padding-top: 32px;
+  padding-top: 22px;
 }
 
 .statValue {
@@ -338,18 +338,18 @@
 
 @media (max-width: 1200px) {
   .hero {
-    padding: 140px 32px;
+    padding: 100px 32px 56px;
   }
 
   .title {
-    font-size: clamp(60px, 8vw, 72px);
+    font-size: clamp(44px, 7vw, 56px);
   }
 }
 
 @media (max-width: 810px) {
   .hero {
-    min-height: 760px;
-    padding: 120px 24px 96px;
+    min-height: 540px;
+    padding: 96px 24px 56px;
   }
 
   .linesLeft,
@@ -363,8 +363,8 @@
   }
 
   .title {
-    font-size: clamp(44px, 13vw, 52px);
-    max-width: 380px;
+    font-size: clamp(32px, 10vw, 38px);
+    max-width: 340px;
   }
 
   .ctaRow {

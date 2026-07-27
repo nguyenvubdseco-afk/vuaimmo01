@@ -6,7 +6,7 @@ import Reveal from "@/components/Reveal";
 export default function GiftsGrid({ products }: { products: Product[] }) {
   if (products.length === 0) {
     return (
-      <section className="px-6 py-20">
+      <section className="px-6 py-14">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm text-muted">
             Hiện chưa có quà tặng nào. Quay lại sau nhé!
@@ -17,7 +17,7 @@ export default function GiftsGrid({ products }: { products: Product[] }) {
   }
 
   return (
-    <section className="px-6 py-20">
+    <section className="px-6 py-14">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product, i) => {

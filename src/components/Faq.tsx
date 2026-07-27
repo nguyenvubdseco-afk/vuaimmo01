@@ -27,7 +27,7 @@ export default function Faq({
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id={withSectionId ? "faq" : undefined} className="px-6 py-20">
+    <section id={withSectionId ? "faq" : undefined} className="px-6 py-14">
       <div className="mx-auto max-w-3xl">
         <Reveal className="text-center">
           <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>

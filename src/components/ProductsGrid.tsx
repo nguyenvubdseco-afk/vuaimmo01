@@ -52,7 +52,7 @@ export default function ProductsGrid({
   const visibleProducts = limit ? filteredProducts.slice(0, limit) : filteredProducts;
 
   return (
-    <section id="products" className="px-6 py-20">
+    <section id="products" className="px-6 py-14">
       {syncWithUrl && (
         <Suspense fallback={null}>
           <CategoryUrlSync onCategory={setActiveCategory} />

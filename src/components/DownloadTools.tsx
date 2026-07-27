@@ -7,7 +7,7 @@ export default function DownloadTools({ products }: { products: Product[] }) {
   if (products.length === 0) return null;
 
   return (
-    <section id="downloads" className="px-6 py-20">
+    <section id="downloads" className="px-6 py-14">
       <div className="mx-auto max-w-5xl">
         <Reveal className="text-center">
           <h2 className="text-2xl font-bold sm:text-3xl">

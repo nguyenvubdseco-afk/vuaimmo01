@@ -3,7 +3,7 @@ import Reveal from "@/components/Reveal";
 
 export default function Features() {
   return (
-    <section id="features" className="px-6 py-20">
+    <section id="features" className="px-6 py-14">
       <div className="mx-auto max-w-5xl text-center">
         <Reveal>
           <h2 className="text-2xl font-bold sm:text-3xl">
